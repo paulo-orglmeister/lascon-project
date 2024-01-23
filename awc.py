@@ -36,7 +36,14 @@ class AWCCell:
 
         self.soma.Ra = 100
         self.soma.cm = 1
-        self.soma.insert('awc') #Inserts custom current defined in awc.mod 
+        #Insert custom currents defined .mod files
+        self.soma.insert('Kvs1')  
+        self.soma.insert('Cav1') 
+        self.soma.insert('Cav2')
+
+        self.soma.g_Kvs1_bar_Kvs1 = .008 #S/cm2 
+        self.soma.g_Cav1_bar_Cav1 = 0.0155 #S/cm2
+        self.soma.g_Cav2_bar_Cav2 = 0.01 #S/cm2
         # Insert passive current in the dendrite
         #self.dend.insert('pas')
         #self.dend.g_pas = 0.001  # Passive conductance in S/cm2
