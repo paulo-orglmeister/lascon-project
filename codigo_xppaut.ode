@@ -63,7 +63,7 @@ par vi_kvs1=47.3,ki_kvs1=11.1
 par p1thkvs1=88.4715, p2thkvs1=50.00, p3thkvs1=-15, p4thkvs1=53.4060, cthkvs1=0.1
 
 hinf_kvs1=1/(1+exp((v-vi_kvs1+skvs1)/(ki_kvs1)))
-th_kvs1=(p1thkvs1/(1+exp(-(v-p2thkvs1)/p3thkvs1))+p4thkvs1)*cthkvs1 #porque tem esse fator 0.1 aqui ??
+th_kvs1=(p1thkvs1/(1+exp(-(v-p2thkvs1)/p3thkvs1))+p4thkvs1)*cthkvs1
 
 
 #equations
@@ -164,7 +164,7 @@ I_egl2=gegl2*m_egl2*(v-ek)
 
 #======================= IRK CHANNELS =================================================================================
 
-par gkir=0.65
+par gkir=0.65 
 
 #activation
 par va_kir=-52, ka_kir=13 
@@ -480,9 +480,13 @@ I_nca=gnca*(v-ena)
 #====================================================================================================================================
 
 
+
 # Total current
 
-I_tot=I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
+ 
+I_tot=I_kqt3
+#I_tot=I_egl2+I_leak+I_kvs1+I_kqt3+Ishal+I_egl19+I_unc2+I_nca+I_kir
+#I_tot=I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
 #I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
 aux Itot=I_tot
 																
@@ -504,15 +508,15 @@ aux Itot=I_tot
 # c: membrane capacitance pF
 
 par ih=0
-par c=3.1
+par c=3.1 #pF
 
 v'=(Istim-I_tot)/c
-init v=-70
+init v=-65
 
 Istim=if(t>ton)then(if(t<toff)then(iclamp)else(ih))else(ih)
-par iclamp=10,ton=1000,toff=5000
+par iclamp=4,ton=900,toff=1400
 
 ### XPP SETTINGS
-@ meth=stiff,trans=900,total=5100,dt=0.01,maxstor=1000000,bound=100000000000000,atol=1e-8,tol=1e-8
-@ xp=t,yp=v,xlo=200,xhi=6000,yhi=30,ylo=-100
+@ meth=stiff,trans=0,total=1500,dt=0.01,maxstor=1000000,bound=100000000000000,atol=1e-8,tol=1e-8
+@ xp=t,yp=v,xlo=000,xhi=2000,yhi=30,ylo=-100
 done

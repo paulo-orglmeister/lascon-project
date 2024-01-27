@@ -11,7 +11,7 @@ ENDCOMMENT
 UNITS {
         (mA) = (milliamp)
         (mV) = (millivolt)
-	    (S) = (siemens)
+	(S) = (siemens)
 }   
 
 ? interface
@@ -26,7 +26,7 @@ NEURON {
 }
  
 PARAMETER {       
-        g_Kv10_bar = 0.0085 (S/cm2)	<0,1e9>
+        g_Kv10_bar = .00075157 (S/cm2)	<0,1e9>
         ek = -80 (mV)
 }
  
@@ -40,19 +40,19 @@ ASSIGNED {
         g_Kv10 (S/cm2)
         i_Kv10 (mA/cm2)
         minf_Kv10 
-	    mtau_Kv10 (ms) }
+	mtau_Kv10 (ms) }
  
 ? currents
 BREAKPOINT {
         SOLVE states METHOD cnexp
         g_Kv10 = g_Kv10_bar*m_Kv10
-	    i_Kv10 = g_Kv10*(v - ek)
+	i_Kv10 = g_Kv10*(v - ek)
         }
  
  
 INITIAL {
 	rates(v)
-        m_Kv10 = minf_Kv10
+        m_Kv10 = 0.0
 	}
 
 ? states
@@ -70,8 +70,8 @@ PROCEDURE rates(v(mV)) {  :Computes rate and other constants at current v.
         
         
 UNITSOFF :Calculates activation / inactivation variables
-        minf_Kv10 = 1/(1+exp(-(v-(-6.8594)+0)/(14.9131)))
-        mtau_Kv10 = (16.7800/(exp(-(v-(-17.5165))/13.7976))+ 8.0969) * 0.5   
+        minf_Kv10 = 1/(1+exp(-(v-(-6.8594)+0)/(14.9131*1)))
+        mtau_Kv10 = ((16.7800/(1 + exp((v-(-122.5682)+0)/13.7976)))+ 8.0969) * 0.5   
 }
  
 FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.

@@ -11,7 +11,7 @@ ENDCOMMENT
 UNITS {
         (mA) = (milliamp)
         (mV) = (millivolt)
-	    (S) = (siemens)
+	(S) = (siemens)
 }   
 
 ? interface
@@ -26,7 +26,7 @@ NEURON {
 }
  
 PARAMETER {       
-        g_Kir_bar = 0.0025 (S/cm2)	<0,1e9>
+        g_Kir_bar = .00057473 (S/cm2)	<0,1e9>
         ek = -80 (mV)
 }
  
@@ -40,19 +40,19 @@ ASSIGNED {
         g_Kir (S/cm2)
         i_Kir (mA/cm2)
         minf_Kir 
-	    mtau_Kir (ms) }
+	mtau_Kir (ms) }
  
 ? currents
 BREAKPOINT {
         SOLVE states METHOD cnexp
         g_Kir = g_Kir_bar*m_Kir
-	    i_Kir = g_Kir*(v - ek)
+	i_Kir = g_Kir*(v - ek)
         }
  
  
 INITIAL {
 	rates(v)
-        m_Kir = minf_Kir
+        m_Kir = 1.0
 	}
 
 ? states
@@ -70,7 +70,7 @@ PROCEDURE rates(v(mV)) {  :Computes rate and other constants at current v.
         
         
 UNITSOFF :Calculates activation / inactivation variables
-        minf_Kir = 1/(1+exp(-(v-(-52)+30)/13))
+        minf_Kir = 1/(1+exp((v-(-52)+30)/13))
         mtau_Kir = 17.0752/(exp(-(v-(-17.8528))/20.3154)+exp((v-(-43.4414)))/11.1691)+3.8329
 }
  
