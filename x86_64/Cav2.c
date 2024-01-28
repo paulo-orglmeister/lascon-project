@@ -196,7 +196,7 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 9, _prop);
  	/*initialize range parameters*/
- 	g_Cav2_bar = 0.00028;
+ 	g_Cav2_bar = 0.00088419;
  	_prop->param = _p;
  	_prop->param_size = 9;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
@@ -380,8 +380,8 @@ static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt)
   m_Cav2 = m_Cav20;
  {
    rates ( _threadargscomma_ v ) ;
-   m_Cav2 = minf_Cav2 ;
-   h_Cav2 = hinf_Cav2 ;
+   m_Cav2 = 0.0 ;
+   h_Cav2 = 1.0 ;
    }
  
 }
@@ -553,7 +553,7 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Cav2_bar = .00028 (S/cm2)	<0,1e9>\n"
+  "        g_Cav2_bar = .00088419 (S/cm2)	<0,1e9>\n"
   "        eca = 60 (mv)\n"
   "}\n"
   " \n"
@@ -583,8 +583,8 @@ static const char* nmodl_file_text =
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "            m_Cav2 = minf_Cav2\n"
-  "	    h_Cav2 = hinf_Cav2\n"
+  "            m_Cav2 = 0.0\n"
+  "	    h_Cav2 = 1.0\n"
   "}\n"
   "\n"
   "? states\n"

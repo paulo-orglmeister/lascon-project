@@ -183,7 +183,7 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 7, _prop);
  	/*initialize range parameters*/
- 	g_Kv10_bar = 0.00024;
+ 	g_Kv10_bar = 0.00075157;
  	_prop->param = _p;
  	_prop->param_size = 7;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
@@ -265,7 +265,7 @@ static int _ode_spec1(_threadargsproto_);
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
     minf_Kv10 = 1.0 / ( 1.0 + exp ( - ( _lv - ( - 6.8594 ) + 0.0 ) / ( 14.9131 * 1.0 ) ) ) ;
-   mtau_Kv10 = ( 16.7800 / ( 1.0 + exp ( ( _lv - ( - 17.5165 ) + 0.0 ) / 13.7976 ) ) + 8.0969 ) * 0.5 ;
+   mtau_Kv10 = ( ( 16.7800 / ( 1.0 + exp ( ( _lv - ( - 122.5682 ) + 0.0 ) / 13.7976 ) ) ) + 8.0969 ) * 0.5 ;
     return 0; }
  
 static void _hoc_rates(void) {
@@ -361,7 +361,7 @@ static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt)
   m_Kv10 = m_Kv100;
  {
    rates ( _threadargscomma_ v ) ;
-   m_Kv10 = minf_Kv10 ;
+   m_Kv10 = 0.0 ;
    }
  
 }
@@ -532,7 +532,7 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kv10_bar = 0.00024 (S/cm2)	<0,1e9>\n"
+  "        g_Kv10_bar = .00075157 (S/cm2)	<0,1e9>\n"
   "        ek = -80 (mV)\n"
   "}\n"
   " \n"
@@ -558,7 +558,7 @@ static const char* nmodl_file_text =
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "        m_Kv10 = minf_Kv10\n"
+  "        m_Kv10 = 0.0\n"
   "	}\n"
   "\n"
   "? states\n"
@@ -577,7 +577,7 @@ static const char* nmodl_file_text =
   "        \n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
   "        minf_Kv10 = 1/(1+exp(-(v-(-6.8594)+0)/(14.9131*1)))\n"
-  "        mtau_Kv10 = (16.7800/(1 + exp((v-(-17.5165)+0)/13.7976))+ 8.0969) * 0.5   \n"
+  "        mtau_Kv10 = ((16.7800/(1 + exp((v-(-122.5682)+0)/13.7976)))+ 8.0969) * 0.5   \n"
   "}\n"
   " \n"
   "FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.\n"

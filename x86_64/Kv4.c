@@ -231,11 +231,11 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 18, _prop);
  	/*initialize range parameters*/
- 	g_Kv4_bar = 0.00082;
+ 	g_Kv4_bar = 0.0025642;
  	ek = -80;
- 	gl = 8e-05;
+ 	gl = 0.0002387;
  	el = -80;
- 	g_Nalcn = 2e-05;
+ 	g_Nalcn = 4.863e-05;
  	eNa = 30;
  	_prop->param = _p;
  	_prop->param_size = 18;
@@ -324,7 +324,7 @@ static int _ode_spec1(_threadargsproto_);
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
     minf_Kv4 = 1.0 / ( 1.0 + exp ( - ( _lv - 11.2 + 18.0 ) / ( 14.1 ) ) ) ;
-   mtau_Kv4 = ( ( 13.8 / ( exp ( - ( _lv - ( - 17.5165 ) ) / 12.9213 ) + exp ( ( _lv - ( - 3.7082 ) ) ) / 6.4876 ) ) + 1.8849 ) * 0.1 ;
+   mtau_Kv4 = ( 13.8 / ( exp ( - ( _lv - ( - 17.5165 ) ) / 12.9213 ) + exp ( ( _lv - ( - 3.7082 ) ) / 6.4876 ) ) + 1.8849 ) * 0.1 ;
    hinf_Kv4 = 1.0 / ( 1.0 + exp ( ( _lv - ( - 33.1 ) + 18.0 ) / ( 8.3 ) ) ) ;
    hstau_Kv4 = ( 8422.0 / ( 1.0 + exp ( ( _lv + 37.7391 ) / 6.3785 ) ) + 118.8983 ) * 0.1 ;
    hftau_Kv4 = ( 539.1584 / ( 1.0 + exp ( ( _lv + 28.1990 ) / 4.9199 ) ) + 27.2811 ) * 0.1 ;
@@ -425,9 +425,9 @@ static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt)
   m_Kv4 = m_Kv40;
  {
    rates ( _threadargscomma_ v ) ;
-   m_Kv4 = minf_Kv4 ;
-   hf_Kv4 = hinf_Kv4 ;
-   hs_Kv4 = hinf_Kv4 ;
+   m_Kv4 = 0.0 ;
+   hf_Kv4 = 1.0 ;
+   hs_Kv4 = 1.0 ;
    }
  
 }
@@ -589,7 +589,7 @@ static const char* nmodl_file_text =
   "UNITS {\n"
   "        (mA) = (milliamp)\n"
   "        (mV) = (millivolt)\n"
-  "	    (S) = (siemens)\n"
+  "	(S) = (siemens)\n"
   "}   \n"
   "\n"
   "? interface\n"
@@ -606,11 +606,11 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kv4_bar = 0.00082 (S/cm2)	<0,1e9>\n"
+  "        g_Kv4_bar = .0025642 (S/cm2)	<0,1e9>\n"
   "        ek = -80 (mV)\n"
-  "        gl = .00008 (S/cm2)	<0,1e9> \n"
+  "        gl = .0002387 (S/cm2)	<0,1e9> \n"
   "        el = -80.0 (mV) :value for AWC neuro\n"
-  "        g_Nalcn = .00002 (S/cm2)	<0,1e9> \n"
+  "        g_Nalcn = .00004863 (S/cm2)	<0,1e9> \n"
   "        eNa = 30 (mV) :value for AWC neuro\n"
   "}\n"
   " \n"
@@ -642,9 +642,9 @@ static const char* nmodl_file_text =
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "        m_Kv4 = minf_Kv4\n"
-  "	hf_Kv4 = hinf_Kv4 :the steady-state voltages are equal for fast and slow inactivation variables (h)\n"
-  "        hs_Kv4 = hinf_Kv4\n"
+  "        m_Kv4 = 0.0\n"
+  "	hf_Kv4 = 1.0 :the steady-state voltages are equal for fast and slow inactivation variables (h)\n"
+  "        hs_Kv4 = 1.0\n"
   "}\n"
   "\n"
   "? states\n"
@@ -665,7 +665,7 @@ static const char* nmodl_file_text =
   "        \n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
   "        minf_Kv4 = 1/(1+exp(-(v-11.2+18)/(14.1)))\n"
-  "        mtau_Kv4 = ((13.8/(exp(-(v-(-17.5165))/12.9213)+exp((v-(-3.7082)))/6.4876))+ 1.8849)*0.1\n"
+  "        mtau_Kv4 = (13.8/(exp(-(v-(-17.5165))/12.9213)+exp((v-(-3.7082))/6.4876))+ 1.8849)*0.1\n"
   "        hinf_Kv4 = 1/(1+exp((v-(-33.1)+18)/(8.3)))\n"
   "        hstau_Kv4 = (8422/(1+exp((v+37.7391)/6.3785))+118.8983)*0.1 :slow inactivation time constant\n"
   "        hftau_Kv4 = (539.1584/(1+exp((v+28.1990)/4.9199))+27.2811)*0.1  :fast inactivation time constant\n"

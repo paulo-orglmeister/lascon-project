@@ -183,7 +183,7 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 7, _prop);
  	/*initialize range parameters*/
- 	g_Kir_bar = 7e-05;
+ 	g_Kir_bar = 0.00057473;
  	_prop->param = _p;
  	_prop->param_size = 7;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
@@ -264,7 +264,7 @@ static int _ode_spec1(_threadargsproto_);
 }
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
-    minf_Kir = 1.0 / ( 1.0 + exp ( - ( _lv - ( - 52.0 ) + 30.0 ) / 13.0 ) ) ;
+    minf_Kir = 1.0 / ( 1.0 + exp ( ( _lv - ( - 52.0 ) + 30.0 ) / 13.0 ) ) ;
    mtau_Kir = 17.0752 / ( exp ( - ( _lv - ( - 17.8528 ) ) / 20.3154 ) + exp ( ( _lv - ( - 43.4414 ) ) ) / 11.1691 ) + 3.8329 ;
     return 0; }
  
@@ -361,7 +361,7 @@ static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt)
   m_Kir = m_Kir0;
  {
    rates ( _threadargscomma_ v ) ;
-   m_Kir = minf_Kir ;
+   m_Kir = 1.0 ;
    }
  
 }
@@ -532,7 +532,7 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kir_bar = 0.00007 (S/cm2)	<0,1e9>\n"
+  "        g_Kir_bar = .00057473 (S/cm2)	<0,1e9>\n"
   "        ek = -80 (mV)\n"
   "}\n"
   " \n"
@@ -558,7 +558,7 @@ static const char* nmodl_file_text =
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "        m_Kir = minf_Kir\n"
+  "        m_Kir = 1.0\n"
   "	}\n"
   "\n"
   "? states\n"
@@ -576,7 +576,7 @@ static const char* nmodl_file_text =
   "        \n"
   "        \n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
-  "        minf_Kir = 1/(1+exp(-(v-(-52)+30)/13))\n"
+  "        minf_Kir = 1/(1+exp((v-(-52)+30)/13))\n"
   "        mtau_Kir = 17.0752/(exp(-(v-(-17.8528))/20.3154)+exp((v-(-43.4414)))/11.1691)+3.8329\n"
   "}\n"
   " \n"

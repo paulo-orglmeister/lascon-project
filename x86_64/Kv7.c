@@ -219,7 +219,7 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 13, _prop);
  	/*initialize range parameters*/
- 	g_Kv7_bar = 0.00015;
+ 	g_Kv7_bar = 0.000486307;
  	_prop->param = _p;
  	_prop->param_size = 13;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
@@ -276,42 +276,42 @@ static int rates(_threadargsprotocomma_ double);
  
 static int _ode_spec1(_threadargsproto_);
 /*static int _ode_matsol1(_threadargsproto_);*/
- static int _slist1[3], _dlist1[3];
+ static int _slist1[4], _dlist1[4];
  static int states(_threadargsproto_);
  
 /*CVODE*/
  static int _ode_spec1 (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) {int _reset = 0; {
    rates ( _threadargscomma_ v ) ;
-   Dms_Kv7 = ( minf_Kv7 - ms_Kv7 ) / mstau_Kv7 ;
    Dmf_Kv7 = ( minf_Kv7 - mf_Kv7 ) / mftau_Kv7 ;
+   Dms_Kv7 = ( minf_Kv7 - ms_Kv7 ) / mstau_Kv7 ;
    Ds_Kv7 = ( sinf_Kv7 - s_Kv7 ) / stau_Kv7 ;
-   w_Kv7 = ( winf_Kv7 - w_Kv7 ) / wtau_Kv7 ;
+   Dw_Kv7 = ( winf_Kv7 - w_Kv7 ) / wtau_Kv7 ;
    }
  return _reset;
 }
  static int _ode_matsol1 (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) {
  rates ( _threadargscomma_ v ) ;
- Dms_Kv7 = Dms_Kv7  / (1. - dt*( ( ( ( - 1.0 ) ) ) / mstau_Kv7 )) ;
  Dmf_Kv7 = Dmf_Kv7  / (1. - dt*( ( ( ( - 1.0 ) ) ) / mftau_Kv7 )) ;
+ Dms_Kv7 = Dms_Kv7  / (1. - dt*( ( ( ( - 1.0 ) ) ) / mstau_Kv7 )) ;
  Ds_Kv7 = Ds_Kv7  / (1. - dt*( ( ( ( - 1.0 ) ) ) / stau_Kv7 )) ;
- w_Kv7 = ( winf_Kv7 - w_Kv7 ) / wtau_Kv7 ;
+ Dw_Kv7 = Dw_Kv7  / (1. - dt*( ( ( ( - 1.0 ) ) ) / wtau_Kv7 )) ;
   return 0;
 }
  /*END CVODE*/
  static int states (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) { {
    rates ( _threadargscomma_ v ) ;
-    ms_Kv7 = ms_Kv7 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / mstau_Kv7)))*(- ( ( ( minf_Kv7 ) ) / mstau_Kv7 ) / ( ( ( ( - 1.0 ) ) ) / mstau_Kv7 ) - ms_Kv7) ;
     mf_Kv7 = mf_Kv7 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / mftau_Kv7)))*(- ( ( ( minf_Kv7 ) ) / mftau_Kv7 ) / ( ( ( ( - 1.0 ) ) ) / mftau_Kv7 ) - mf_Kv7) ;
+    ms_Kv7 = ms_Kv7 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / mstau_Kv7)))*(- ( ( ( minf_Kv7 ) ) / mstau_Kv7 ) / ( ( ( ( - 1.0 ) ) ) / mstau_Kv7 ) - ms_Kv7) ;
     s_Kv7 = s_Kv7 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / stau_Kv7)))*(- ( ( ( sinf_Kv7 ) ) / stau_Kv7 ) / ( ( ( ( - 1.0 ) ) ) / stau_Kv7 ) - s_Kv7) ;
-   w_Kv7 = ( winf_Kv7 - w_Kv7 ) / wtau_Kv7 ;
+    w_Kv7 = w_Kv7 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / wtau_Kv7)))*(- ( ( ( winf_Kv7 ) ) / wtau_Kv7 ) / ( ( ( ( - 1.0 ) ) ) / wtau_Kv7 ) - w_Kv7) ;
    }
   return 0;
 }
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
-    minf_Kv7 = 1.0 / ( 1.0 + exp ( - ( _lv - ( - 12.6726 ) ) + 10.0 ) / 15.8008 ) ;
-   mstau_Kv7 = ( 5503.0 - 5345.4 / ( 1.0 + pow( 10.0 , ( - 0.02827 * ( - 23.9 - _lv ) ) ) ) - 4590.6 / ( 1.0 + pow( 10.0 , ( - 0.0357 * ( _lv + 14.15 ) ) ) ) ) * 0.1 ;
+    minf_Kv7 = 1.0 / ( 1.0 + exp ( - ( _lv - ( - 12.6726 ) + 10.0 ) / 15.8008 ) ) ;
    mftau_Kv7 = ( 395.3 / ( 1.0 + pow( ( ( _lv + 38.1 ) / 33.59 ) , 2.0 ) ) ) * 0.1 ;
+   mstau_Kv7 = ( 5503.0 - 5345.4 / ( 1.0 + pow( 10.0 , ( ( - 0.02827 ) * ( ( - 23.9 ) - _lv ) ) ) ) - 4590.6 / ( 1.0 + pow( 10.0 , ( ( - 0.0357 ) * ( _lv + 14.15 ) ) ) ) ) * 0.1 ;
    sinf_Kv7 = 0.34 + ( 0.66 / ( 1.0 + exp ( ( _lv + 45.3 ) / 12.3 ) ) ) ;
    stau_Kv7 = 5000.0 * 0.1 ;
    winf_Kv7 = 0.49 + ( 0.51 / ( 1.0 + exp ( ( _lv + 1.084 ) / 28.78 ) ) ) ;
@@ -351,7 +351,7 @@ static void _hoc_vtrap(void) {
  hoc_retpushx(_r);
 }
  
-static int _ode_count(int _type){ return 3;}
+static int _ode_count(int _type){ return 4;}
  
 static void _ode_spec(NrnThread* _nt, _Memb_list* _ml, int _type) {
    double* _p; Datum* _ppvar; Datum* _thread;
@@ -369,7 +369,7 @@ static void _ode_map(int _ieq, double** _pv, double** _pvdot, double* _pp, Datum
 	double* _p; Datum* _ppvar;
  	int _i; _p = _pp; _ppvar = _ppd;
 	_cvode_ieq = _ieq;
-	for (_i=0; _i < 3; ++_i) {
+	for (_i=0; _i < 4; ++_i) {
 		_pv[_i] = _pp + _slist1[_i];  _pvdot[_i] = _pp + _dlist1[_i];
 		_cvode_abstol(_atollist, _atol, _i);
 	}
@@ -414,8 +414,8 @@ static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt)
   w_Kv7 = w_Kv70;
  {
    rates ( _threadargscomma_ v ) ;
-   ms_Kv7 = minf_Kv7 ;
-   mf_Kv7 = minf_Kv7 ;
+   ms_Kv7 = 0.0 ;
+   mf_Kv7 = 0.0 ;
    s_Kv7 = sinf_Kv7 ;
    w_Kv7 = winf_Kv7 ;
    }
@@ -448,7 +448,7 @@ for (_iml = 0; _iml < _cntml; ++_iml) {
 }
 
 static double _nrn_current(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt, double _v){double _current=0.;v=_v;{ {
-   g_Kv7 = g_Kv7_bar * ( 0.7 * mf_Kv7 + 0.3 * ms_Kv7 ) * w_Kv7 * s_Kv7 ;
+   g_Kv7 = g_Kv7_bar * ( 0.3 * mf_Kv7 + 0.7 * ms_Kv7 ) * w_Kv7 * s_Kv7 ;
    i_Kv7 = g_Kv7 * ( v - ek ) ;
    }
  _current += i_Kv7;
@@ -549,9 +549,10 @@ static void _initlists(){
  double _x; double* _p = &_x;
  int _i; static int _first = 1;
   if (!_first) return;
- _slist1[0] = ms_Kv7_columnindex;  _dlist1[0] = Dms_Kv7_columnindex;
- _slist1[1] = mf_Kv7_columnindex;  _dlist1[1] = Dmf_Kv7_columnindex;
+ _slist1[0] = mf_Kv7_columnindex;  _dlist1[0] = Dmf_Kv7_columnindex;
+ _slist1[1] = ms_Kv7_columnindex;  _dlist1[1] = Dms_Kv7_columnindex;
  _slist1[2] = s_Kv7_columnindex;  _dlist1[2] = Ds_Kv7_columnindex;
+ _slist1[3] = w_Kv7_columnindex;  _dlist1[3] = Dw_Kv7_columnindex;
 _first = 0;
 }
 
@@ -581,7 +582,6 @@ static const char* nmodl_file_text =
   "? interface\n"
   "NEURON {\n"
   "        SUFFIX Kv7\n"
-  "        REPRESENTS NCIT:C17008   : potassium channel\n"
   "        NONSPECIFIC_CURRENT i_Kv7\n"
   "        RANGE g_Kv7_bar, g_Kv7\n"
   "        GLOBAL minf_Kv7, winf_Kv7, sinf_Kv7, mstau_Kv7, mftau_Kv7, wtau_Kv7, stau_Kv7\n"
@@ -590,7 +590,7 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kv7_bar = .00015 (S/cm2)	<0,1e9>\n"
+  "        g_Kv7_bar = .000486307 (S/cm2)	<0,1e9>\n"
   "        ek = -80 (mV)\n"
   "}\n"
   " \n"
@@ -605,21 +605,24 @@ static const char* nmodl_file_text =
   "        g_Kv7 (S/cm2)\n"
   "        i_Kv7 (mA/cm2)\n"
   "        minf_Kv7 sinf_Kv7 winf_Kv7 \n"
-  "	mstau_Kv7 (ms) mftau_Kv7 (ms) stau_Kv7 (ms) wtau_Kv7 (ms)\n"
+  "	mstau_Kv7 (ms) \n"
+  "        mftau_Kv7 (ms) \n"
+  "        stau_Kv7 (ms) \n"
+  "        wtau_Kv7 (ms)\n"
   "}\n"
   " \n"
   "? currents\n"
   "BREAKPOINT {\n"
   "        SOLVE states METHOD cnexp\n"
-  "        g_Kv7 = g_Kv7_bar*(0.7*mf_Kv7 + 0.3*ms_Kv7)*w_Kv7*s_Kv7\n"
-  "	    i_Kv7 = g_Kv7*(v - ek)\n"
+  "        g_Kv7 = g_Kv7_bar*(0.3*mf_Kv7 + 0.7*ms_Kv7)*w_Kv7*s_Kv7\n"
+  "	i_Kv7 = g_Kv7*(v - ek) \n"
   "        }\n"
   " \n"
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "        ms_Kv7 = minf_Kv7 :the steady state activation variables are equal for fast and slow m\n"
-  "        mf_Kv7 = minf_Kv7\n"
+  "        ms_Kv7 = 0.0 :the steady state activation variables are equal for fast and slow m\n"
+  "        mf_Kv7 = 0.0\n"
   "        s_Kv7 = sinf_Kv7\n"
   "        w_Kv7 = winf_Kv7\n"
   "}\n"
@@ -627,10 +630,10 @@ static const char* nmodl_file_text =
   "? states\n"
   "DERIVATIVE states {  \n"
   "        rates(v)\n"
-  "        ms_Kv7' =  (minf_Kv7-ms_Kv7)/mstau_Kv7\n"
   "        mf_Kv7' =  (minf_Kv7-mf_Kv7)/mftau_Kv7\n"
+  "        ms_Kv7' =  (minf_Kv7-ms_Kv7)/mstau_Kv7\n"
   "        s_Kv7' = (sinf_Kv7-s_Kv7)/stau_Kv7\n"
-  "        w_Kv7 = (winf_Kv7-w_Kv7)/wtau_Kv7\n"
+  "        w_Kv7' = (winf_Kv7-w_Kv7)/wtau_Kv7\n"
   "}\n"
   " \n"
   "\n"
@@ -640,14 +643,15 @@ static const char* nmodl_file_text =
   "        \n"
   "        \n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
-  "        minf_Kv7 = 1/(1+exp(-(v-(-12.6726))+10)/15.8008)\n"
-  "        mstau_Kv7 = (5503-5345.4/(1+10^(-0.02827*(-23.9-v)))-4590.6/(1+10^(-0.0357*(v+14.15))))*0.1\n"
-  "        mftau_Kv7 = (395.3/(1+((v+38.1)/33.59)^2))*0.1\n"
+  "        minf_Kv7 = 1/(1+exp(-(v-(-12.6726)+10)/15.8008))\n"
+  "        mftau_Kv7= (395.3/(1+((v+38.1)/33.59)^2))*0.1\n"
+  "        mstau_Kv7= (5503-5345.4/(1+10^((-0.02827)*((-23.9)-v)))-4590.6/(1+10^((-0.0357)*(v+14.15))))*0.1\n"
+  "\n"
   "        sinf_Kv7 = 0.34+(0.66/(1+exp((v+45.3)/12.3)))\n"
   "        stau_Kv7 = 5000*0.1\n"
   "        winf_Kv7 = 0.49+(0.51/(1+exp((v+1.084)/28.78)))\n"
   "        wtau_Kv7 = (5.44+(29.2/(1+((v+48.09)/48.83)^2)))*0.1\n"
-  "        }\n"
+  "                }\n"
   " \n"
   "FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.\n"
   "        if (fabs(x/y) < 1e-6) {\n"

@@ -113,16 +113,10 @@ par va_kqt3=-12.6726,ka_kqt3=15.8008
 par ckqt3=0.1
 
 par p1tmskqt3=5503,p2tmskqt3=5345.4,p3tmskqt3=-0.02827,p4tmskqt3=-23.9,p5tmskqt3=4590.6,p6tmskqt3=-0.0357,p7tmskqt3=14.15
-
-
-
-
 par p1tmfkqt3=395.3,p2tmfkqt3=38.1,p3tmfkqt3=33.59,constkqt3=10
 
 minf_kqt3=1/(1+exp(-(v-va_kqt3+constkqt3)/ka_kqt3))
 tmf_kqt3=(p1tmfkqt3/(1+((v+p2tmfkqt3)/p3tmfkqt3)^2))*ckqt3
-
-
 tms_kqt3=(p1tmskqt3-p2tmskqt3/(1+10^(p3tmskqt3*(p4tmskqt3-v)))-p5tmskqt3/(1+10^(p6tmskqt3*(v+p7tmskqt3))))*ckqt3
 
 
