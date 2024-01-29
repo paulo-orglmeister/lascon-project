@@ -18,7 +18,7 @@ UNITS {
 NEURON {
         SUFFIX Kv7
         NONSPECIFIC_CURRENT i_Kv7
-        RANGE g_Kv7_bar, g_Kv7
+        RANGE g_Kv7_bar, g_Kv7, ek
         GLOBAL minf_Kv7, winf_Kv7, sinf_Kv7, mstau_Kv7, mftau_Kv7, wtau_Kv7, stau_Kv7
         
 	THREADSAFE : assigned GLOBALs will be per thread

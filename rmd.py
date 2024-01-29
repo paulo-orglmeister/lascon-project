@@ -21,7 +21,7 @@ class RMDCell:
     
     def define_geometry(self):
         """Set the 3D geometry of the cell."""
-        self.soma.L = self.soma.diam = 1.0 # microns (estimate)
+        self.soma.L = self.soma.diam = 4.84 # microns (estimate)
         #self.dend.L = 41.92  # microns                   
         #self.dend.diam = 0.2979 # microns                    
         #self.dend.nseg = 11
@@ -34,26 +34,24 @@ class RMDCell:
             sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
         '''
 
-        self.soma.cm = 38.19718634 # (uF/cm2) (Nicoletti et. al)
+        self.soma.cm = 1.630574514 # (uF/cm2) (Nicoletti et. al)
         #Insert custom currents defined in .mod files
-        #self.soma.insert('Kv3')
-        #self.soma.insert('Kv4')
-        #self.soma.insert('Kir')
-        #self.soma.insert('Cav1') 
-        #self.soma.insert('Cav2')
-        #self.soma.insert('Cav3')
+        #self.soma.insert('Kv3') OK
+        #self.soma.insert('Kv4') OK 
+        #self.soma.insert('Kir') OK 
+        #self.soma.insert('Cav1') OK
+        self.soma.insert('Cav2')  
+        #self.soma.insert('Cav3') OK
 
-        #self.soma.g_Kv3_bar_Kv3    = .04138029 #S/cm2 (egl-36)
-        #self.soma.gl_Kv4          = .07957747 #S/cm2 (leak) 
-        #self.g_Nalcn_Kv4          =  #S/cm2 (leak)
-        #self.soma.g_Kv4_bar_Kv4   =  #S/cm2 (shl-1)  
-        #self.soma.g_Kvs1_bar_Kvs1 =  #S/cm2 (kvs-1)   
-        #self.soma.g_Kir_bar_Kir   = 0.00636620  #S/cm2 (irkl-3) 
-        #self.soma.g_Kv7_bar_Kv7   =  #S/cm2 (kqt-3) 
-        #self.soma.g_Kv10_bar_Kv10 =  #S/cm2 (egl-2)  
-        #self.soma.g_Cav1_bar_Cav1 =  #S/cm2 (elg-19) 
-        #self.soma.g_Cav2_bar_Cav2 =  #S/cm2 (unc-2) 
-        
+        #self.soma.g_Kv3_bar_Kv3   = .00176646 #S/cm2 (egl-36)
+        #self.soma.gl_Kv4          = .00054352 #S/cm2 (leak) 
+        #self.soma.g_Nalcn_Kv4          = .00006794 #S/cm2 (nca)
+        #self.soma.g_Kv4_bar_Kv4   = .00339703 #S/cm2 (shl-1)  
+        #self.soma.g_Kir_bar_Kir   = .00027176 #S/cm2 (irkl-3) 
+        #self.soma.g_Cav1_bar_Cav1 = .00134522 #S/cm2 (elg-19) 
+        self.soma.g_Cav2_bar_Cav2 = .00122293 #S/cm2 (unc-2) 
+        #self.soma.g_Cav3_bar_Cav3 = .00421232 #S/cm2 (cca-1)
+
         # Insert passive current in the dendrite
         #self.dend.insert('pas')
         #self.dend.g_pas = 0.001  # Passive conductance in S/cm2
@@ -63,7 +61,7 @@ class RMDCell:
         self.stim = h.IClamp(self.soma(0.5)) #1.0 is the distal end of the dendrite
         self.stim.amp = 0.004 # input current in nA
         self.stim.delay = delay  # turn on after this time in ms
-        self.stim.dur = 500  # duration of 1 ms
+        self.stim.dur = 50  # duration of 1 ms
     
     def set_recording(self):
         """Set soma, dendrite, and time recording vectors on the cell. """

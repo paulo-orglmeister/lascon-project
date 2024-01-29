@@ -183,7 +183,7 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 7, _prop);
  	/*initialize range parameters*/
- 	g_Kir_bar = 0.00057473;
+ 	g_Kir_bar = 0;
  	_prop->param = _p;
  	_prop->param_size = 7;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
@@ -532,7 +532,7 @@ static const char* nmodl_file_text =
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kir_bar = .00057473 (S/cm2)	<0,1e9>\n"
+  "        g_Kir_bar = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
   "        ek = -80 (mV)\n"
   "}\n"
   " \n"

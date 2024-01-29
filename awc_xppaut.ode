@@ -484,9 +484,8 @@ I_nca=gnca*(v-ena)
 # Total current
 
  
-I_tot=I_kqt3
 #I_tot=I_egl2+I_leak+I_kvs1+I_kqt3+Ishal+I_egl19+I_unc2+I_nca+I_kir
-#I_tot=I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
+I_tot=I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
 #I_egl2+I_leak+I_kvs1+I_bk+I_kqt3+Ishal+I_egl19+I_unc2+I_bk2+I_sk+I_slo1+I_slo2+I_nca+I_kir+I_cca1+I_shak
 aux Itot=I_tot
 																

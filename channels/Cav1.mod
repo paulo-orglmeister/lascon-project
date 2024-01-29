@@ -17,16 +17,15 @@ UNITS {
 ? interface
 NEURON {
         SUFFIX Cav1
-        REPRESENTS NCIT:C17008   : potassium channel
         NONSPECIFIC_CURRENT i_Cav1
-        RANGE g_Cav1_bar, g_Cav1
+        RANGE g_Cav1_bar, g_Cav1, eca
         GLOBAL minf_Cav1, hinf_Cav1, mtau_Cav1, htau_Cav1
         
 	THREADSAFE : assigned GLOBALs will be per thread
 }
  
 PARAMETER {       
-        g_Cav1_bar = .00137050 (S/cm2)	<0,1e9>
+        g_Cav1_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
         eca = 60 
 }
  
@@ -46,7 +45,7 @@ ASSIGNED {
 ? currents
 BREAKPOINT {
         SOLVE states METHOD cnexp
-        g_Cav1 = g_Cav1_bar*m_Cav1*h_Cav1
+            g_Cav1 = g_Cav1_bar*m_Cav1*h_Cav1
 	    i_Cav1 = g_Cav1*(v - eca)
         }
  

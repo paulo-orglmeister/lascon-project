@@ -1,3 +1,11 @@
+./Kv3.c: ../Kv3.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "Kv3.mod" -o "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/x86_64")
+
+./Kv3.o: ./Kv3.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
 ./Kv4.c: ../Kv4.mod
 	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
 	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "Kv4.mod" -o "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/x86_64")
@@ -51,6 +59,14 @@
 	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "Cav2.mod" -o "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/x86_64")
 
 ./Cav2.o: ./Cav2.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./Cav3.c: ../Cav3.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "Cav3.mod" -o "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/x86_64")
+
+./Cav3.o: ./Cav3.c
 	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
 	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
 

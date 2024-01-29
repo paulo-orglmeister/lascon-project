@@ -45,7 +45,7 @@ class AWCCell:
         self.soma.insert('Cav2')
 
         self.soma.gl_Kv4         = .0002387 #S/cm2 (leak) OK
-        self.g_Nalcn_Kv4         = .00004863 #S/cm2 (leak) OK
+        self.g_Nalcn_Kv4         = .00004863 #S/cm2 (nca) OK
         self.soma.g_Kv4_bar_Kv4   = .0025642  #S/cm2 (shl-1) OK 
         self.soma.g_Kvs1_bar_Kvs1 = .00070736 #S/cm2 (kvs-1) OK  
         self.soma.g_Kir_bar_Kir   =  .00057473 #S/cm2 (irkl-3) OK
@@ -60,10 +60,10 @@ class AWCCell:
         self.dend.e_pas = -80    # Leak reversal potential mV
                 
     def add_current_stim(self, delay):
-        self.stim = h.IClamp(self.dend(1.0)) #1.0 is the distal end of the dendrite
-        self.stim.amp = 0.40 # input current in nA
+        self.stim = h.IClamp(self.soma(1.0)) #1.0 is the distal end of the dendrite
+        self.stim.amp = 0.020 # input current in nA
         self.stim.delay = delay  # turn on after this time in ms
-        self.stim.dur = 5  # duration of 1 ms
+        self.stim.dur = 500  # duration of 1 ms
     
     def set_recording(self):
         """Set soma, dendrite, and time recording vectors on the cell. """

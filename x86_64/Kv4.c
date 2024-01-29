@@ -61,22 +61,22 @@ extern double hoc_Exp(double);
 #define il_columnindex 6
 #define iNalcn _p[7]
 #define iNalcn_columnindex 7
-#define g_Kv4 _p[8]
-#define g_Kv4_columnindex 8
-#define i_Kv4 _p[9]
-#define i_Kv4_columnindex 9
-#define m_Kv4 _p[10]
-#define m_Kv4_columnindex 10
-#define hf_Kv4 _p[11]
-#define hf_Kv4_columnindex 11
-#define hs_Kv4 _p[12]
-#define hs_Kv4_columnindex 12
-#define Dm_Kv4 _p[13]
-#define Dm_Kv4_columnindex 13
-#define Dhf_Kv4 _p[14]
-#define Dhf_Kv4_columnindex 14
-#define Dhs_Kv4 _p[15]
-#define Dhs_Kv4_columnindex 15
+#define i_Kv4 _p[8]
+#define i_Kv4_columnindex 8
+#define m_Kv4 _p[9]
+#define m_Kv4_columnindex 9
+#define hf_Kv4 _p[10]
+#define hf_Kv4_columnindex 10
+#define hs_Kv4 _p[11]
+#define hs_Kv4_columnindex 11
+#define Dm_Kv4 _p[12]
+#define Dm_Kv4_columnindex 12
+#define Dhf_Kv4 _p[13]
+#define Dhf_Kv4_columnindex 13
+#define Dhs_Kv4 _p[14]
+#define Dhs_Kv4_columnindex 14
+#define g_Kv4 _p[15]
+#define g_Kv4_columnindex 15
 #define v _p[16]
 #define v_columnindex 16
 #define _g _p[17]
@@ -168,7 +168,6 @@ static double _thread1data[5];
  "eNa_Kv4", "mV",
  "il_Kv4", "mA/cm2",
  "iNalcn_Kv4", "mA/cm2",
- "g_Kv4_Kv4", "S/cm2",
  "i_Kv4_Kv4", "mA/cm2",
  0,0
 };
@@ -215,7 +214,6 @@ static void _ode_matsol(NrnThread*, _Memb_list*, int);
  0,
  "il_Kv4",
  "iNalcn_Kv4",
- "g_Kv4_Kv4",
  "i_Kv4_Kv4",
  0,
  "m_Kv4_Kv4",
@@ -231,11 +229,11 @@ static void nrn_alloc(Prop* _prop) {
 	double *_p; Datum *_ppvar;
  	_p = nrn_prop_data_alloc(_mechtype, 18, _prop);
  	/*initialize range parameters*/
- 	g_Kv4_bar = 0.0025642;
+ 	g_Kv4_bar = 0;
  	ek = -80;
- 	gl = 0.0002387;
+ 	gl = 0;
  	el = -80;
- 	g_Nalcn = 4.863e-05;
+ 	g_Nalcn = 0;
  	eNa = 30;
  	_prop->param = _p;
  	_prop->param_size = 18;
@@ -599,18 +597,18 @@ static const char* nmodl_file_text =
   "        NONSPECIFIC_CURRENT i_Kv4\n"
   "        NONSPECIFIC_CURRENT iNalcn\n"
   "        NONSPECIFIC_CURRENT il\n"
-  "        RANGE g_Kv4_bar, g_Kv4, g_Nalcn, gl, el, eNa, ek\n"
+  "        RANGE g_Kv4_bar, g_Nalcn, gl, el, eNa, ek\n"
   "        GLOBAL minf_Kv4, hinf_Kv4, mtau_Kv4, hstau_Kv4, hftau_Kv4\n"
   "        \n"
   "	THREADSAFE : assigned GLOBALs will be per thread\n"
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Kv4_bar = .0025642 (S/cm2)	<0,1e9>\n"
+  "        g_Kv4_bar = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
   "        ek = -80 (mV)\n"
-  "        gl = .0002387 (S/cm2)	<0,1e9> \n"
+  "        gl = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
   "        el = -80.0 (mV) :value for AWC neuro\n"
-  "        g_Nalcn = .00004863 (S/cm2)	<0,1e9> \n"
+  "        g_Nalcn = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
   "        eNa = 30 (mV) :value for AWC neuro\n"
   "}\n"
   " \n"

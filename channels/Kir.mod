@@ -26,7 +26,7 @@ NEURON {
 }
  
 PARAMETER {       
-        g_Kir_bar = .00057473 (S/cm2)	<0,1e9>
+        g_Kir_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
         ek = -80 (mV)
 }
  

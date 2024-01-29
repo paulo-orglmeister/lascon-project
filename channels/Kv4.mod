@@ -21,18 +21,18 @@ NEURON {
         NONSPECIFIC_CURRENT i_Kv4
         NONSPECIFIC_CURRENT iNalcn
         NONSPECIFIC_CURRENT il
-        RANGE g_Kv4_bar, g_Kv4, g_Nalcn, gl, el, eNa, ek
+        RANGE g_Kv4_bar, g_Nalcn, gl, el, eNa, ek
         GLOBAL minf_Kv4, hinf_Kv4, mtau_Kv4, hstau_Kv4, hftau_Kv4
         
 	THREADSAFE : assigned GLOBALs will be per thread
 }
  
 PARAMETER {       
-        g_Kv4_bar = .0025642 (S/cm2)	<0,1e9>
+        g_Kv4_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
         ek = -80 (mV)
-        gl = .0002387 (S/cm2)	<0,1e9> 
+        gl = .0 (S/cm2)	<0,1e9> :assigned in python script
         el = -80.0 (mV) :value for AWC neuro
-        g_Nalcn = .00004863 (S/cm2)	<0,1e9> 
+        g_Nalcn = .0 (S/cm2)	<0,1e9> :assigned in python script
         eNa = 30 (mV) :value for AWC neuro
 }
  

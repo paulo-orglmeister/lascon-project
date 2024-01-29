@@ -47,22 +47,24 @@ extern double hoc_Exp(double);
 #define dt _nt->_dt
 #define g_Cav2_bar _p[0]
 #define g_Cav2_bar_columnindex 0
-#define g_Cav2 _p[1]
-#define g_Cav2_columnindex 1
-#define i_Cav2 _p[2]
-#define i_Cav2_columnindex 2
-#define m_Cav2 _p[3]
-#define m_Cav2_columnindex 3
-#define h_Cav2 _p[4]
-#define h_Cav2_columnindex 4
-#define Dm_Cav2 _p[5]
-#define Dm_Cav2_columnindex 5
-#define Dh_Cav2 _p[6]
-#define Dh_Cav2_columnindex 6
-#define v _p[7]
-#define v_columnindex 7
-#define _g _p[8]
-#define _g_columnindex 8
+#define eca _p[1]
+#define eca_columnindex 1
+#define g_Cav2 _p[2]
+#define g_Cav2_columnindex 2
+#define i_Cav2 _p[3]
+#define i_Cav2_columnindex 3
+#define m_Cav2 _p[4]
+#define m_Cav2_columnindex 4
+#define h_Cav2 _p[5]
+#define h_Cav2_columnindex 5
+#define Dm_Cav2 _p[6]
+#define Dm_Cav2_columnindex 6
+#define Dh_Cav2 _p[7]
+#define Dh_Cav2_columnindex 7
+#define v _p[8]
+#define v_columnindex 8
+#define _g _p[9]
+#define _g_columnindex 9
  
 #if MAC
 #if !defined(v)
@@ -122,8 +124,6 @@ extern void hoc_reg_nmodl_filename(int, const char*);
  static int _thread1data_inuse = 0;
 static double _thread1data[4];
 #define _gth 0
-#define eca eca_Cav2
- double eca = 60;
 #define htau_Cav2_Cav2 _thread1data[0]
 #define htau_Cav2 _thread[_gth]._pval[0]
 #define hinf_Cav2_Cav2 _thread1data[1]
@@ -138,7 +138,6 @@ static double _thread1data[4];
  0,0,0
 };
  static HocParmUnits _hoc_parm_units[] = {
- "eca_Cav2", "mv",
  "mtau_Cav2_Cav2", "ms",
  "htau_Cav2_Cav2", "ms",
  "g_Cav2_bar_Cav2", "S/cm2",
@@ -151,7 +150,6 @@ static double _thread1data[4];
  static double m_Cav20 = 0;
  /* connect global user variables to hoc */
  static DoubScal hoc_scdoub[] = {
- "eca_Cav2", &eca_Cav2,
  "minf_Cav2_Cav2", &minf_Cav2_Cav2,
  "hinf_Cav2_Cav2", &hinf_Cav2_Cav2,
  "mtau_Cav2_Cav2", &mtau_Cav2_Cav2,
@@ -180,6 +178,7 @@ static void _ode_matsol(NrnThread*, _Memb_list*, int);
  "7.7.0",
 "Cav2",
  "g_Cav2_bar_Cav2",
+ "eca_Cav2",
  0,
  "g_Cav2_Cav2",
  "i_Cav2_Cav2",
@@ -194,11 +193,12 @@ extern Prop* need_memb(Symbol*);
 static void nrn_alloc(Prop* _prop) {
 	Prop *prop_ion;
 	double *_p; Datum *_ppvar;
- 	_p = nrn_prop_data_alloc(_mechtype, 9, _prop);
+ 	_p = nrn_prop_data_alloc(_mechtype, 10, _prop);
  	/*initialize range parameters*/
- 	g_Cav2_bar = 0.00088419;
+ 	g_Cav2_bar = 0;
+ 	eca = 60;
  	_prop->param = _p;
- 	_prop->param_size = 9;
+ 	_prop->param_size = 10;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
  	_prop->dparam = _ppvar;
  	/*connect ionic variables to this model*/
@@ -233,7 +233,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
   hoc_reg_nmodl_text(_mechtype, nmodl_file_text);
   hoc_reg_nmodl_filename(_mechtype, nmodl_filename);
 #endif
-  hoc_register_prop_size(_mechtype, 9, 1);
+  hoc_register_prop_size(_mechtype, 10, 1);
   hoc_register_dparam_semantics(_mechtype, 0, "cvodeieq");
  	hoc_register_cvode(_mechtype, _ode_count, _ode_map, _ode_spec, _ode_matsol);
  	hoc_register_tolerance(_mechtype, _hoc_state_tol, &_atollist);
@@ -243,7 +243,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
 static int _reset;
-static char *modelname = "Cav2.mod   C. Elegans Cav2 current";
+static char *modelname = "Cav2.mod   C. Elegans Cav2 (unc-2) current";
 
 static int error;
 static int _ninits = 0;
@@ -281,7 +281,7 @@ static int _ode_spec1(_threadargsproto_);
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
     minf_Cav2 = 1.0 / ( 1.0 + exp ( - ( _lv - ( - 12.17 ) + 25.0 ) / ( 3.97 ) ) ) ;
-   mtau_Cav2 = ( ( 1.4969 / ( exp ( - ( _lv - ( - 8.1761 ) ) + 30.0 ) / ( 9.0753 ) ) + exp ( ( _lv - ( - 8.1761 ) + 30.0 ) / ( 15.3456 ) ) ) + 0.1029 ) * 3.0 ;
+   mtau_Cav2 = ( 1.4969 / ( exp ( - ( _lv - ( - 8.1761 ) + 30.0 ) / ( 9.0753 ) ) + exp ( ( _lv - ( - 8.1761 ) + 30.0 ) / ( 15.3456 ) ) ) + 0.1029 ) * 3.0 ;
    hinf_Cav2 = 1.0 / ( 1.0 + exp ( ( _lv - ( - 52.47 ) + 25.0 ) / ( 5.6 ) ) ) ;
    htau_Cav2 = ( 83.8037 / ( 1.0 + exp ( ( _lv - 52.8997 + 30.0 ) / ( 3.4557 ) ) ) + 72.0995 / ( 1.0 + exp ( - ( _lv - 23.9009 + 30.0 ) / ( 3.5903 ) ) ) ) * 1.7 ;
     return 0; }
@@ -525,7 +525,7 @@ _first = 0;
 #if NMODL_TEXT
 static const char* nmodl_filename = "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/Cav2.mod";
 static const char* nmodl_file_text = 
-  "TITLE Cav2.mod   C. Elegans Cav2 current\n"
+  "TITLE Cav2.mod   C. Elegans Cav2 (unc-2) current\n"
   " \n"
   "COMMENT\n"
   "\n"
@@ -544,53 +544,49 @@ static const char* nmodl_file_text =
   "? interface\n"
   "NEURON {\n"
   "        SUFFIX Cav2\n"
-  "        REPRESENTS NCIT:C17008   : potassium channel\n"
   "        NONSPECIFIC_CURRENT i_Cav2\n"
-  "        RANGE g_Cav2_bar, g_Cav2\n"
+  "        RANGE g_Cav2_bar, g_Cav2, eca\n"
   "        GLOBAL minf_Cav2, hinf_Cav2, mtau_Cav2, htau_Cav2\n"
   "        \n"
   "	THREADSAFE : assigned GLOBALs will be per thread\n"
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Cav2_bar = .00088419 (S/cm2)	<0,1e9>\n"
-  "        eca = 60 (mv)\n"
+  "        g_Cav2_bar = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
+  "        eca = 60 \n"
   "}\n"
   " \n"
   "STATE {\n"
-  "  \n"
   "        m_Cav2 h_Cav2  \n"
   "}\n"
   " \n"
   "ASSIGNED {\n"
-  "        v (mV)\n"
+  "        v (mV) \n"
   "        :-----------------------------------Cav2 channels-----------------------------------------\n"
   "        g_Cav2 (S/cm2)\n"
   "        i_Cav2 (mA/cm2)\n"
-  "        minf_Cav2 \n"
-  "        hinf_Cav2 \n"
-  "	mtau_Cav2 (ms) \n"
-  "        htau_Cav2 (ms)\n"
+  "        minf_Cav2 hinf_Cav2 \n"
+  "	mtau_Cav2 (ms) htau_Cav2 (ms)\n"
   "}\n"
   " \n"
   "? currents\n"
   "BREAKPOINT {\n"
   "        SOLVE states METHOD cnexp\n"
-  "                g_Cav2 = g_Cav2_bar*m_Cav2*h_Cav2\n"
+  "            g_Cav2 = g_Cav2_bar*m_Cav2*h_Cav2\n"
   "	    i_Cav2 = g_Cav2*(v - eca)\n"
   "        }\n"
   " \n"
   " \n"
   "INITIAL {\n"
   "	rates(v)\n"
-  "            m_Cav2 = 0.0\n"
-  "	    h_Cav2 = 1.0\n"
+  "        m_Cav2 = 0.0\n"
+  "	h_Cav2 = 1.0\n"
   "}\n"
   "\n"
   "? states\n"
   "DERIVATIVE states {  \n"
   "        rates(v)\n"
-  "        m_Cav2' =  (minf_Cav2-m_Cav2)/mtau_Cav2\n"
+  "        m_Cav2' = (minf_Cav2-m_Cav2)/mtau_Cav2\n"
   "        h_Cav2' = (hinf_Cav2-h_Cav2)/htau_Cav2\n"
   "}\n"
   " \n"
@@ -605,11 +601,11 @@ static const char* nmodl_file_text =
   "\n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
   "        minf_Cav2 = 1/(1+exp(-(v-(-12.17)+25)/(3.97))) \n"
-  "        mtau_Cav2 = ((1.4969/(exp(-(v-(-8.1761))+30)/(9.0753))+exp((v-(-8.1761)+30)/(15.3456))) + 0.1029)*3    \n"
+  "        mtau_Cav2 = (1.4969/(exp(-(v-(-8.1761)+30)/(9.0753))+exp((v-(-8.1761)+30)/(15.3456)))+0.1029)*3    \n"
   "        hinf_Cav2 = 1/(1+exp((v-(-52.47)+25)/(5.6)))\n"
   "        htau_Cav2 = (83.8037/(1+exp((v-52.8997+30)/(3.4557)))+72.0995/(1+exp(-(v-23.9009+30)/(3.5903))))*1.7\n"
-  "}\n"
-  " \n"
+  "\n"
+  "}   \n"
   "FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.\n"
   "        if (fabs(x/y) < 1e-6) {\n"
   "                vtrap = y*(1 - x/y/2)\n"

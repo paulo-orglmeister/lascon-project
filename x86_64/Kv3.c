@@ -22,15 +22,15 @@ extern int _method3;
 extern double hoc_Exp(double);
 #endif
  
-#define nrn_init _nrn_init__Cav1
-#define _nrn_initial _nrn_initial__Cav1
-#define nrn_cur _nrn_cur__Cav1
-#define _nrn_current _nrn_current__Cav1
-#define nrn_jacob _nrn_jacob__Cav1
-#define nrn_state _nrn_state__Cav1
-#define _net_receive _net_receive__Cav1 
-#define rates rates__Cav1 
-#define states states__Cav1 
+#define nrn_init _nrn_init__Kv3
+#define _nrn_initial _nrn_initial__Kv3
+#define nrn_cur _nrn_cur__Kv3
+#define _nrn_current _nrn_current__Kv3
+#define nrn_jacob _nrn_jacob__Kv3
+#define nrn_state _nrn_state__Kv3
+#define _net_receive _net_receive__Kv3 
+#define rates rates__Kv3 
+#define states states__Kv3 
  
 #define _threadargscomma_ _p, _ppvar, _thread, _nt,
 #define _threadargsprotocomma_ double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt,
@@ -45,26 +45,30 @@ extern double hoc_Exp(double);
  
 #define t _nt->_t
 #define dt _nt->_dt
-#define g_Cav1_bar _p[0]
-#define g_Cav1_bar_columnindex 0
-#define eca _p[1]
-#define eca_columnindex 1
-#define g_Cav1 _p[2]
-#define g_Cav1_columnindex 2
-#define i_Cav1 _p[3]
-#define i_Cav1_columnindex 3
-#define m_Cav1 _p[4]
-#define m_Cav1_columnindex 4
-#define h_Cav1 _p[5]
-#define h_Cav1_columnindex 5
-#define Dm_Cav1 _p[6]
-#define Dm_Cav1_columnindex 6
-#define Dh_Cav1 _p[7]
-#define Dh_Cav1_columnindex 7
-#define v _p[8]
-#define v_columnindex 8
-#define _g _p[9]
-#define _g_columnindex 9
+#define g_Kv3_bar _p[0]
+#define g_Kv3_bar_columnindex 0
+#define ek _p[1]
+#define ek_columnindex 1
+#define i_Kv3 _p[2]
+#define i_Kv3_columnindex 2
+#define m1_Kv3 _p[3]
+#define m1_Kv3_columnindex 3
+#define m2_Kv3 _p[4]
+#define m2_Kv3_columnindex 4
+#define m3_Kv3 _p[5]
+#define m3_Kv3_columnindex 5
+#define Dm1_Kv3 _p[6]
+#define Dm1_Kv3_columnindex 6
+#define Dm2_Kv3 _p[7]
+#define Dm2_Kv3_columnindex 7
+#define Dm3_Kv3 _p[8]
+#define Dm3_Kv3_columnindex 8
+#define g_Kv3 _p[9]
+#define g_Kv3_columnindex 9
+#define v _p[10]
+#define v_columnindex 10
+#define _g _p[11]
+#define _g_columnindex 11
  
 #if MAC
 #if !defined(v)
@@ -113,47 +117,55 @@ extern void hoc_reg_nmodl_filename(int, const char*);
 }
  /* connect user functions to hoc names */
  static VoidFunc hoc_intfunc[] = {
- "setdata_Cav1", _hoc_setdata,
- "rates_Cav1", _hoc_rates,
- "vtrap_Cav1", _hoc_vtrap,
+ "setdata_Kv3", _hoc_setdata,
+ "rates_Kv3", _hoc_rates,
+ "vtrap_Kv3", _hoc_vtrap,
  0, 0
 };
-#define vtrap vtrap_Cav1
+#define vtrap vtrap_Kv3
  extern double vtrap( _threadargsprotocomma_ double , double );
  /* declare global and static user variables */
  static int _thread1data_inuse = 0;
-static double _thread1data[4];
+static double _thread1data[6];
 #define _gth 0
-#define htau_Cav1_Cav1 _thread1data[0]
-#define htau_Cav1 _thread[_gth]._pval[0]
-#define hinf_Cav1_Cav1 _thread1data[1]
-#define hinf_Cav1 _thread[_gth]._pval[1]
-#define mtau_Cav1_Cav1 _thread1data[2]
-#define mtau_Cav1 _thread[_gth]._pval[2]
-#define minf_Cav1_Cav1 _thread1data[3]
-#define minf_Cav1 _thread[_gth]._pval[3]
+#define m3tau_Kv3_Kv3 _thread1data[0]
+#define m3tau_Kv3 _thread[_gth]._pval[0]
+#define m2tau_Kv3_Kv3 _thread1data[1]
+#define m2tau_Kv3 _thread[_gth]._pval[1]
+#define m1tau_Kv3_Kv3 _thread1data[2]
+#define m1tau_Kv3 _thread[_gth]._pval[2]
+#define m3inf_Kv3_Kv3 _thread1data[3]
+#define m3inf_Kv3 _thread[_gth]._pval[3]
+#define m2inf_Kv3_Kv3 _thread1data[4]
+#define m2inf_Kv3 _thread[_gth]._pval[4]
+#define m1inf_Kv3_Kv3 _thread1data[5]
+#define m1inf_Kv3 _thread[_gth]._pval[5]
  /* some parameters have upper and lower limits */
  static HocParmLimits _hoc_parm_limits[] = {
- "g_Cav1_bar_Cav1", 0, 1e+09,
+ "g_Kv3_bar_Kv3", 0, 1e+09,
  0,0,0
 };
  static HocParmUnits _hoc_parm_units[] = {
- "mtau_Cav1_Cav1", "ms",
- "htau_Cav1_Cav1", "ms",
- "g_Cav1_bar_Cav1", "S/cm2",
- "g_Cav1_Cav1", "S/cm2",
- "i_Cav1_Cav1", "mA/cm2",
+ "m1tau_Kv3_Kv3", "ms",
+ "m2tau_Kv3_Kv3", "ms",
+ "m3tau_Kv3_Kv3", "ms",
+ "g_Kv3_bar_Kv3", "S/cm2",
+ "ek_Kv3", "mV",
+ "i_Kv3_Kv3", "mA/cm2",
  0,0
 };
  static double delta_t = 0.01;
- static double h_Cav10 = 0;
- static double m_Cav10 = 0;
+ static double m3_Kv30 = 0;
+ static double m2_Kv30 = 0;
+ static double m1_Kv30 = 0;
  /* connect global user variables to hoc */
  static DoubScal hoc_scdoub[] = {
- "minf_Cav1_Cav1", &minf_Cav1_Cav1,
- "hinf_Cav1_Cav1", &hinf_Cav1_Cav1,
- "mtau_Cav1_Cav1", &mtau_Cav1_Cav1,
- "htau_Cav1_Cav1", &htau_Cav1_Cav1,
+ "m1inf_Kv3_Kv3", &m1inf_Kv3_Kv3,
+ "m2inf_Kv3_Kv3", &m2inf_Kv3_Kv3,
+ "m3inf_Kv3_Kv3", &m3inf_Kv3_Kv3,
+ "m1tau_Kv3_Kv3", &m1tau_Kv3_Kv3,
+ "m2tau_Kv3_Kv3", &m2tau_Kv3_Kv3,
+ "m3tau_Kv3_Kv3", &m3tau_Kv3_Kv3,
  0,0
 };
  static DoubVec hoc_vdoub[] = {
@@ -176,15 +188,15 @@ static void _ode_matsol(NrnThread*, _Memb_list*, int);
  /* connect range variables in _p that hoc is supposed to know about */
  static const char *_mechanism[] = {
  "7.7.0",
-"Cav1",
- "g_Cav1_bar_Cav1",
- "eca_Cav1",
+"Kv3",
+ "g_Kv3_bar_Kv3",
+ "ek_Kv3",
  0,
- "g_Cav1_Cav1",
- "i_Cav1_Cav1",
+ "i_Kv3_Kv3",
  0,
- "m_Cav1_Cav1",
- "h_Cav1_Cav1",
+ "m1_Kv3_Kv3",
+ "m2_Kv3_Kv3",
+ "m3_Kv3_Kv3",
  0,
  0};
  
@@ -193,12 +205,12 @@ extern Prop* need_memb(Symbol*);
 static void nrn_alloc(Prop* _prop) {
 	Prop *prop_ion;
 	double *_p; Datum *_ppvar;
- 	_p = nrn_prop_data_alloc(_mechtype, 10, _prop);
+ 	_p = nrn_prop_data_alloc(_mechtype, 12, _prop);
  	/*initialize range parameters*/
- 	g_Cav1_bar = 0;
- 	eca = 60;
+ 	g_Kv3_bar = 0;
+ 	ek = -80;
  	_prop->param = _p;
- 	_prop->param_size = 10;
+ 	_prop->param_size = 12;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
  	_prop->dparam = _ppvar;
  	/*connect ionic variables to this model*/
@@ -218,7 +230,7 @@ extern void _nrn_thread_table_reg(int, void(*)(double*, Datum*, Datum*, NrnThrea
 extern void hoc_register_tolerance(int, HocStateTolerance*, Symbol***);
 extern void _cvode_abstol( Symbol**, double*, int);
 
- void _Cav1_reg() {
+ void _Kv3_reg() {
 	int _vectorized = 1;
   _initlists();
  	register_mech(_mechanism, nrn_alloc,nrn_cur, nrn_jacob, nrn_state, nrn_init, hoc_nrnpointerindex, 2);
@@ -233,17 +245,17 @@ extern void _cvode_abstol( Symbol**, double*, int);
   hoc_reg_nmodl_text(_mechtype, nmodl_file_text);
   hoc_reg_nmodl_filename(_mechtype, nmodl_filename);
 #endif
-  hoc_register_prop_size(_mechtype, 10, 1);
+  hoc_register_prop_size(_mechtype, 12, 1);
   hoc_register_dparam_semantics(_mechtype, 0, "cvodeieq");
  	hoc_register_cvode(_mechtype, _ode_count, _ode_map, _ode_spec, _ode_matsol);
  	hoc_register_tolerance(_mechtype, _hoc_state_tol, &_atollist);
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 Cav1 /home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/Cav1.mod\n");
+ 	ivoc_help("help ?1 Kv3 /home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/Kv3.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
 static int _reset;
-static char *modelname = "Cav1.mod   C. Elegans Cav1 (egl-19) current";
+static char *modelname = "Kv3.mod   C. Elegans Kv3 current (egl-36)";
 
 static int error;
 static int _ninits = 0;
@@ -253,37 +265,42 @@ static int rates(_threadargsprotocomma_ double);
  
 static int _ode_spec1(_threadargsproto_);
 /*static int _ode_matsol1(_threadargsproto_);*/
- static int _slist1[2], _dlist1[2];
+ static int _slist1[3], _dlist1[3];
  static int states(_threadargsproto_);
  
 /*CVODE*/
  static int _ode_spec1 (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) {int _reset = 0; {
    rates ( _threadargscomma_ v ) ;
-   Dm_Cav1 = ( minf_Cav1 - m_Cav1 ) / mtau_Cav1 ;
-   Dh_Cav1 = ( hinf_Cav1 - h_Cav1 ) / htau_Cav1 ;
+   Dm1_Kv3 = ( m1inf_Kv3 - m1_Kv3 ) / m1tau_Kv3 ;
+   Dm2_Kv3 = ( m2inf_Kv3 - m2_Kv3 ) / m2tau_Kv3 ;
+   Dm3_Kv3 = ( m3inf_Kv3 - m3_Kv3 ) / m3tau_Kv3 ;
    }
  return _reset;
 }
  static int _ode_matsol1 (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) {
  rates ( _threadargscomma_ v ) ;
- Dm_Cav1 = Dm_Cav1  / (1. - dt*( ( ( ( - 1.0 ) ) ) / mtau_Cav1 )) ;
- Dh_Cav1 = Dh_Cav1  / (1. - dt*( ( ( ( - 1.0 ) ) ) / htau_Cav1 )) ;
+ Dm1_Kv3 = Dm1_Kv3  / (1. - dt*( ( ( ( - 1.0 ) ) ) / m1tau_Kv3 )) ;
+ Dm2_Kv3 = Dm2_Kv3  / (1. - dt*( ( ( ( - 1.0 ) ) ) / m2tau_Kv3 )) ;
+ Dm3_Kv3 = Dm3_Kv3  / (1. - dt*( ( ( ( - 1.0 ) ) ) / m3tau_Kv3 )) ;
   return 0;
 }
  /*END CVODE*/
  static int states (double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) { {
    rates ( _threadargscomma_ v ) ;
-    m_Cav1 = m_Cav1 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / mtau_Cav1)))*(- ( ( ( minf_Cav1 ) ) / mtau_Cav1 ) / ( ( ( ( - 1.0 ) ) ) / mtau_Cav1 ) - m_Cav1) ;
-    h_Cav1 = h_Cav1 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / htau_Cav1)))*(- ( ( ( hinf_Cav1 ) ) / htau_Cav1 ) / ( ( ( ( - 1.0 ) ) ) / htau_Cav1 ) - h_Cav1) ;
+    m1_Kv3 = m1_Kv3 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / m1tau_Kv3)))*(- ( ( ( m1inf_Kv3 ) ) / m1tau_Kv3 ) / ( ( ( ( - 1.0 ) ) ) / m1tau_Kv3 ) - m1_Kv3) ;
+    m2_Kv3 = m2_Kv3 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / m2tau_Kv3)))*(- ( ( ( m2inf_Kv3 ) ) / m2tau_Kv3 ) / ( ( ( ( - 1.0 ) ) ) / m2tau_Kv3 ) - m2_Kv3) ;
+    m3_Kv3 = m3_Kv3 + (1. - exp(dt*(( ( ( - 1.0 ) ) ) / m3tau_Kv3)))*(- ( ( ( m3inf_Kv3 ) ) / m3tau_Kv3 ) / ( ( ( ( - 1.0 ) ) ) / m3tau_Kv3 ) - m3_Kv3) ;
    }
   return 0;
 }
  
 static int  rates ( _threadargsprotocomma_ double _lv ) {
-    minf_Cav1 = 1.0 / ( 1.0 + exp ( - ( _lv - 5.6 + 10.0 ) / 7.50 ) ) ;
-   mtau_Cav1 = 2.3359 + ( 2.9324 * exp ( - pow( ( _lv - 5.2357 + 10.0 ) , 2.0 ) / pow( ( 6.0 ) , 2.0 ) ) ) + ( 1.8739 * exp ( - pow( ( _lv - 1.3930 + 10.0 ) , 2.0 ) / pow( ( 30.0 ) , 2.0 ) ) ) ;
-   hinf_Cav1 = ( 1.4314 / ( 1.0 + exp ( - ( _lv - 24.8573 + 10.0 ) / 11.9541 ) ) + 0.1427 ) * ( 5.9589 / ( 1.0 + exp ( ( _lv - ( - 10.5428 ) + 10.0 ) / 8.0552 ) ) + 0.6038 ) ;
-   htau_Cav1 = 0.4 * ( ( ( 0.55 * 81.1179 ) / ( 1.0 + exp ( ( _lv - ( - 22.9723 ) + 10.0 ) / 5.0 ) ) ) + 43.0937 + ( ( 0.9 * 40.4885 ) / ( 1.0 + exp ( ( _lv - 28.7251 + 10.0 ) / 3.7125 ) ) ) + 0.0 ) ;
+    m1inf_Kv3 = 1.0 / ( 1.0 + exp ( - ( _lv - 63.0 ) / ( 28.5 ) ) ) ;
+   m1tau_Kv3 = 355.0 ;
+   m2inf_Kv3 = 1.0 / ( 1.0 + exp ( - ( _lv - 63.0 ) / ( 28.5 ) ) ) ;
+   m2tau_Kv3 = 63.0 ;
+   m3inf_Kv3 = 1.0 / ( 1.0 + exp ( - ( _lv - 63.0 ) / ( 28.5 ) ) ) ;
+   m3tau_Kv3 = 13.0 ;
     return 0; }
  
 static void _hoc_rates(void) {
@@ -319,7 +336,7 @@ static void _hoc_vtrap(void) {
  hoc_retpushx(_r);
 }
  
-static int _ode_count(int _type){ return 2;}
+static int _ode_count(int _type){ return 3;}
  
 static void _ode_spec(NrnThread* _nt, _Memb_list* _ml, int _type) {
    double* _p; Datum* _ppvar; Datum* _thread;
@@ -337,7 +354,7 @@ static void _ode_map(int _ieq, double** _pv, double** _pvdot, double* _pp, Datum
 	double* _p; Datum* _ppvar;
  	int _i; _p = _pp; _ppvar = _ppd;
 	_cvode_ieq = _ieq;
-	for (_i=0; _i < 2; ++_i) {
+	for (_i=0; _i < 3; ++_i) {
 		_pv[_i] = _pp + _slist1[_i];  _pvdot[_i] = _pp + _dlist1[_i];
 		_cvode_abstol(_atollist, _atol, _i);
 	}
@@ -360,7 +377,7 @@ static void _ode_matsol(NrnThread* _nt, _Memb_list* _ml, int _type) {
  }}
  
 static void _thread_mem_init(Datum* _thread) {
-  if (_thread1data_inuse) {_thread[_gth]._pval = (double*)ecalloc(4, sizeof(double));
+  if (_thread1data_inuse) {_thread[_gth]._pval = (double*)ecalloc(6, sizeof(double));
  }else{
  _thread[_gth]._pval = _thread1data; _thread1data_inuse = 1;
  }
@@ -376,12 +393,14 @@ static void _thread_cleanup(Datum* _thread) {
 
 static void initmodel(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt) {
   int _i; double _save;{
-  h_Cav1 = h_Cav10;
-  m_Cav1 = m_Cav10;
+  m3_Kv3 = m3_Kv30;
+  m2_Kv3 = m2_Kv30;
+  m1_Kv3 = m1_Kv30;
  {
    rates ( _threadargscomma_ v ) ;
-   m_Cav1 = 0.0 ;
-   h_Cav1 = 1.0 ;
+   m1_Kv3 = 0.0 ;
+   m2_Kv3 = 0.0 ;
+   m3_Kv3 = 0.0 ;
    }
  
 }
@@ -412,10 +431,10 @@ for (_iml = 0; _iml < _cntml; ++_iml) {
 }
 
 static double _nrn_current(double* _p, Datum* _ppvar, Datum* _thread, NrnThread* _nt, double _v){double _current=0.;v=_v;{ {
-   g_Cav1 = g_Cav1_bar * m_Cav1 * h_Cav1 ;
-   i_Cav1 = g_Cav1 * ( v - eca ) ;
+   g_Kv3 = g_Kv3_bar * ( 0.31 * m1_Kv3 + 0.36 * m2_Kv3 + 0.39 * m3_Kv3 ) ;
+   i_Kv3 = g_Kv3 * ( v - ek ) ;
    }
- _current += i_Cav1;
+ _current += i_Kv3;
 
 } return _current;
 }
@@ -513,8 +532,9 @@ static void _initlists(){
  double _x; double* _p = &_x;
  int _i; static int _first = 1;
   if (!_first) return;
- _slist1[0] = m_Cav1_columnindex;  _dlist1[0] = Dm_Cav1_columnindex;
- _slist1[1] = h_Cav1_columnindex;  _dlist1[1] = Dh_Cav1_columnindex;
+ _slist1[0] = m1_Kv3_columnindex;  _dlist1[0] = Dm1_Kv3_columnindex;
+ _slist1[1] = m2_Kv3_columnindex;  _dlist1[1] = Dm2_Kv3_columnindex;
+ _slist1[2] = m3_Kv3_columnindex;  _dlist1[2] = Dm3_Kv3_columnindex;
 _first = 0;
 }
 
@@ -523,10 +543,10 @@ _first = 0;
 #endif
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/Cav1.mod";
+static const char* nmodl_filename = "/home/paulo/Documents/Estudos/Ciências/Ciências Naturais/Biologia/Neurociência/LASCON/lascon-project/channels/Kv3.mod";
 static const char* nmodl_file_text = 
-  "TITLE Cav1.mod   C. Elegans Cav1 (egl-19) current\n"
-  " \n"
+  "TITLE Kv3.mod   C. Elegans Kv3 current (egl-36)\n"
+  "\n"
   "COMMENT\n"
   "\n"
   "This current is part of a model for the AWC and RMD neurons in C. Elegans, following the treatment in Nicoletti et al. (2019).\n"
@@ -538,57 +558,59 @@ static const char* nmodl_file_text =
   "UNITS {\n"
   "        (mA) = (milliamp)\n"
   "        (mV) = (millivolt)\n"
-  "	(S) = (siemens)\n"
+  "    	(S) = (siemens)\n"
   "}   \n"
   "\n"
   "? interface\n"
   "NEURON {\n"
-  "        SUFFIX Cav1\n"
-  "        NONSPECIFIC_CURRENT i_Cav1\n"
-  "        RANGE g_Cav1_bar, g_Cav1, eca\n"
-  "        GLOBAL minf_Cav1, hinf_Cav1, mtau_Cav1, htau_Cav1\n"
-  "        \n"
+  "        SUFFIX Kv3\n"
+  "        NONSPECIFIC_CURRENT i_Kv3\n"
+  "        RANGE g_Kv3_bar, ek\n"
+  "        GLOBAL m1inf_Kv3, m2inf_Kv3, m3inf_Kv3, m1tau_Kv3,  m2tau_Kv3,  m3tau_Kv3\n"
+  "\n"
   "	THREADSAFE : assigned GLOBALs will be per thread\n"
   "}\n"
   " \n"
   "PARAMETER {       \n"
-  "        g_Cav1_bar = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
-  "        eca = 60 \n"
+  "        g_Kv3_bar = .0 (S/cm2)	<0,1e9> :assigned in python script\n"
+  "        ek = -80 (mV)\n"
   "}\n"
   " \n"
   "STATE {\n"
-  "        m_Cav1 h_Cav1  \n"
+  "        m1_Kv3 m2_Kv3 m3_Kv3   \n"
   "}\n"
   " \n"
   "ASSIGNED {\n"
-  "        v (mV) \n"
-  "        :-----------------------------------Cav1 channels-----------------------------------------\n"
-  "        g_Cav1 (S/cm2)\n"
-  "        i_Cav1 (mA/cm2)\n"
-  "        minf_Cav1 hinf_Cav1 \n"
-  "	mtau_Cav1 (ms) htau_Cav1 (ms)\n"
+  "        v (mV)\n"
+  "        :-----------------------------------Kv3 channels-----------------------------------------\n"
+  "        g_Kv3 (S/cm2)\n"
+  "        i_Kv3 (mA/cm2)\n"
+  "        m1inf_Kv3 m2inf_Kv3 m3inf_Kv3 \n"
+  "	m1tau_Kv3 (ms) m2tau_Kv3 (ms) m3tau_Kv3 (ms)\n"
   "}\n"
   " \n"
   "? currents\n"
   "BREAKPOINT {\n"
   "        SOLVE states METHOD cnexp\n"
-  "            g_Cav1 = g_Cav1_bar*m_Cav1*h_Cav1\n"
-  "	    i_Cav1 = g_Cav1*(v - eca)\n"
+  "        g_Kv3 = g_Kv3_bar*(0.31*m1_Kv3+0.36*m2_Kv3+0.39*m3_Kv3)\n"
+  "	    i_Kv3 = g_Kv3*(v - ek)\n"
   "        }\n"
   " \n"
   " \n"
   "INITIAL {\n"
-  "	rates(v)\n"
-  "        m_Cav1 = 0.0\n"
-  "	h_Cav1 = 1.0\n"
-  "}\n"
+  "	    rates(v)\n"
+  "        m1_Kv3 = 0.0\n"
+  "        m2_Kv3 = 0.0\n"
+  "        m3_Kv3 = 0.0\n"
+  "	}\n"
   "\n"
   "? states\n"
   "DERIVATIVE states {  \n"
   "        rates(v)\n"
-  "        m_Cav1' = (minf_Cav1-m_Cav1)/mtau_Cav1\n"
-  "        h_Cav1' = (hinf_Cav1-h_Cav1)/htau_Cav1\n"
-  "}\n"
+  "        m1_Kv3' =  (m1inf_Kv3-m1_Kv3)/m1tau_Kv3\n"
+  "        m2_Kv3' =  (m2inf_Kv3-m2_Kv3)/m2tau_Kv3\n"
+  "        m3_Kv3' =  (m3inf_Kv3-m3_Kv3)/m3tau_Kv3\n"
+  "    }\n"
   " \n"
   "\n"
   "\n"
@@ -597,13 +619,15 @@ static const char* nmodl_file_text =
   "PROCEDURE rates(v(mV)) {  :Computes rate and other constants at current v.\n"
   "                      :Call once from HOC to initialize inf at resting v.\n"
   "        \n"
-  "        :TABLE minf_Kvs1, mtau_Kvs1, hinf_Kvs1, htau_Kvs1 DEPEND celsius FROM -100 TO 100 WITH 200\n"
-  "\n"
+  "        \n"
   "UNITSOFF :Calculates activation / inactivation variables\n"
-  "        minf_Cav1 = 1/(1+exp(-(v-5.6+10)/7.50)) \n"
-  "        mtau_Cav1 = 2.3359+(2.9324*exp(-(v-5.2357+10)^2/(6.0)^2))+(1.8739*exp(-(v-1.3930+10)^2/(30.0)^2))\n"
-  "        hinf_Cav1 = (1.4314/(1+exp(-(v-24.8573+10)/11.9541))+0.1427)*(5.9589/(1+exp((v-(-10.5428)+10)/8.0552))+0.6038)\n"
-  "        htau_Cav1 = 0.4*(((0.55*81.1179)/(1+exp((v-(-22.9723)+10)/5)))+43.0937+((0.9*40.4885)/(1+exp((v-28.7251+10)/3.7125)))+0)\n"
+  "        m1inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))\n"
+  "        m1tau_Kv3 = 355\n"
+  "        m2inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))\n"
+  "        m2tau_Kv3 = 63\n"
+  "        m3inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))\n"
+  "        m3tau_Kv3 = 13\n"
+  "       \n"
   "}\n"
   " \n"
   "FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.\n"
@@ -614,6 +638,6 @@ static const char* nmodl_file_text =
   "        }\n"
   "}\n"
   " \n"
-  "UNITSON\n"
+  "UNITSON \n"
   ;
 #endif

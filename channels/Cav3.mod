@@ -1,4 +1,4 @@
-TITLE Cav2.mod   C. Elegans Cav2 (unc-2) current
+TITLE Cav3.mod   C. Elegans Cav3 (cca-1) current
  
 COMMENT
 
@@ -11,56 +11,57 @@ ENDCOMMENT
 UNITS {
         (mA) = (milliamp)
         (mV) = (millivolt)
-	(S) = (siemens)
+	    (S) = (siemens)
 }   
 
 ? interface
 NEURON {
-        SUFFIX Cav2
-        NONSPECIFIC_CURRENT i_Cav2
-        RANGE g_Cav2_bar, g_Cav2, eca
-        GLOBAL minf_Cav2, hinf_Cav2, mtau_Cav2, htau_Cav2
+        SUFFIX Cav3
+        REPRESENTS NCIT:C17008   : potassium channel
+        NONSPECIFIC_CURRENT i_Cav3
+        RANGE g_Cav3_bar, eca
+        GLOBAL minf_Cav3, hinf_Cav3, mtau_Cav3, htau_Cav3
         
 	THREADSAFE : assigned GLOBALs will be per thread
 }
  
 PARAMETER {       
-        g_Cav2_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
+        g_Cav3_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
         eca = 60 
 }
  
 STATE {
-        m_Cav2 h_Cav2  
+        m_Cav3 h_Cav3  
 }
  
 ASSIGNED {
         v (mV) 
-        :-----------------------------------Cav2 channels-----------------------------------------
-        g_Cav2 (S/cm2)
-        i_Cav2 (mA/cm2)
-        minf_Cav2 hinf_Cav2 
-	mtau_Cav2 (ms) htau_Cav2 (ms)
+        :-----------------------------------Cav3 channels-----------------------------------------
+        g_Cav3 (S/cm2)
+        i_Cav3 (mA/cm2)
+        minf_Cav3 hinf_Cav3 
+	mtau_Cav3 (ms) htau_Cav3 (ms)
 }
  
 ? currents
 BREAKPOINT {
         SOLVE states METHOD cnexp
-            g_Cav2 = g_Cav2_bar*m_Cav2*h_Cav2
-	    i_Cav2 = g_Cav2*(v - eca)
+        g_Cav3 = g_Cav3_bar*(m_Cav3^2)*h_Cav3
+	    i_Cav3 = g_Cav3*(v - eca)
         }
  
  
 INITIAL {
 	rates(v)
-        m_Cav2 = 0.0
-	h_Cav2 = 1.0
+        m_Cav3 = 0.0
+	h_Cav3 = 1.0
 }
 
 ? states
 DERIVATIVE states {  
         rates(v)
-        m_Cav2' = (minf_Cav2-m_Cav2)/mtau_Cav2
-        h_Cav2' = (hinf_Cav2-h_Cav2)/htau_Cav2
+        m_Cav3' = (minf_Cav3-m_Cav3)/mtau_Cav3
+        h_Cav3' = (hinf_Cav3-h_Cav3)/htau_Cav3
 }
  
 
@@ -73,12 +74,12 @@ PROCEDURE rates(v(mV)) {  :Computes rate and other constants at current v.
         :TABLE minf_Kvs1, mtau_Kvs1, hinf_Kvs1, htau_Kvs1 DEPEND celsius FROM -100 TO 100 WITH 200
 
 UNITSOFF :Calculates activation / inactivation variables
-        minf_Cav2 = 1/(1+exp(-(v-(-12.17)+25)/(3.97))) 
-        mtau_Cav2 = (1.4969/(exp(-(v-(-8.1761)+30)/(9.0753))+exp((v-(-8.1761)+30)/(15.3456)))+0.1029)*3    
-        hinf_Cav2 = 1/(1+exp((v-(-52.47)+25)/(5.6)))
-        htau_Cav2 = (83.8037/(1+exp((v-52.8997+30)/(3.4557)))+72.0995/(1+exp(-(v-23.9009+30)/(3.5903))))*1.7
-
-}   
+        minf_Cav3 = 1/(1+exp(-(v-(-42.65)+15)/(1.7*1.4))) 
+        mtau_Cav3 = ((40/(1+exp(-(v-(-62.5393)+15)/((-12.4758)*1.7))))+0.6947)*0.5
+        hinf_Cav3 = 1/(1+exp((v-(-58)+15)/(7*1.15)))
+        htau_Cav3 = ((280/(1+exp((v-(-60.7312)+15)/(8.5224*1.1))))+19.7456)*0.08
+}
+ 
 FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.
         if (fabs(x/y) < 1e-6) {
                 vtrap = y*(1 - x/y/2)

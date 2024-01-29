@@ -17,15 +17,15 @@ UNITS {
 ? interface
 NEURON {
         SUFFIX Kv3
-        REPRESENTS NCIT:C17008   : potassium channel
         NONSPECIFIC_CURRENT i_Kv3
+        RANGE g_Kv3_bar, ek
         GLOBAL m1inf_Kv3, m2inf_Kv3, m3inf_Kv3, m1tau_Kv3,  m2tau_Kv3,  m3tau_Kv3
 
 	THREADSAFE : assigned GLOBALs will be per thread
 }
  
 PARAMETER {       
-        g_Kv3_bar = .04138029 (S/cm2)	<0,1e9>
+        g_Kv3_bar = .0 (S/cm2)	<0,1e9> :assigned in python script
         ek = -80 (mV)
 }
  
@@ -39,7 +39,7 @@ ASSIGNED {
         g_Kv3 (S/cm2)
         i_Kv3 (mA/cm2)
         m1inf_Kv3 m2inf_Kv3 m3inf_Kv3 
-	    m1tau_Kv3 (ms) m2tau_Kv3 (ms) m3tau_Kv3 (ms)
+	m1tau_Kv3 (ms) m2tau_Kv3 (ms) m3tau_Kv3 (ms)
 }
  
 ? currents
@@ -74,11 +74,11 @@ PROCEDURE rates(v(mV)) {  :Computes rate and other constants at current v.
         
         
 UNITSOFF :Calculates activation / inactivation variables
-        m1inf_Kv3 = 1/(1+exp(-(v-63+18)/(28.5)))
+        m1inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))
         m1tau_Kv3 = 355
-        m2inf_Kv3 = 1/(1+exp(-(v-63+18)/(28.5)))
+        m2inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))
         m2tau_Kv3 = 63
-        m3inf_Kv3 = 1/(1+exp(-(v-63+18)/(28.5)))
+        m3inf_Kv3 = 1/(1+exp(-(v-63)/(28.5)))
         m3tau_Kv3 = 13
        
 }

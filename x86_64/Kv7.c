@@ -47,30 +47,32 @@ extern double hoc_Exp(double);
 #define dt _nt->_dt
 #define g_Kv7_bar _p[0]
 #define g_Kv7_bar_columnindex 0
-#define g_Kv7 _p[1]
-#define g_Kv7_columnindex 1
-#define i_Kv7 _p[2]
-#define i_Kv7_columnindex 2
-#define ms_Kv7 _p[3]
-#define ms_Kv7_columnindex 3
-#define mf_Kv7 _p[4]
-#define mf_Kv7_columnindex 4
-#define w_Kv7 _p[5]
-#define w_Kv7_columnindex 5
-#define s_Kv7 _p[6]
-#define s_Kv7_columnindex 6
-#define Dms_Kv7 _p[7]
-#define Dms_Kv7_columnindex 7
-#define Dmf_Kv7 _p[8]
-#define Dmf_Kv7_columnindex 8
-#define Dw_Kv7 _p[9]
-#define Dw_Kv7_columnindex 9
-#define Ds_Kv7 _p[10]
-#define Ds_Kv7_columnindex 10
-#define v _p[11]
-#define v_columnindex 11
-#define _g _p[12]
-#define _g_columnindex 12
+#define ek _p[1]
+#define ek_columnindex 1
+#define g_Kv7 _p[2]
+#define g_Kv7_columnindex 2
+#define i_Kv7 _p[3]
+#define i_Kv7_columnindex 3
+#define ms_Kv7 _p[4]
+#define ms_Kv7_columnindex 4
+#define mf_Kv7 _p[5]
+#define mf_Kv7_columnindex 5
+#define w_Kv7 _p[6]
+#define w_Kv7_columnindex 6
+#define s_Kv7 _p[7]
+#define s_Kv7_columnindex 7
+#define Dms_Kv7 _p[8]
+#define Dms_Kv7_columnindex 8
+#define Dmf_Kv7 _p[9]
+#define Dmf_Kv7_columnindex 9
+#define Dw_Kv7 _p[10]
+#define Dw_Kv7_columnindex 10
+#define Ds_Kv7 _p[11]
+#define Ds_Kv7_columnindex 11
+#define v _p[12]
+#define v_columnindex 12
+#define _g _p[13]
+#define _g_columnindex 13
  
 #if MAC
 #if !defined(v)
@@ -130,8 +132,6 @@ extern void hoc_reg_nmodl_filename(int, const char*);
  static int _thread1data_inuse = 0;
 static double _thread1data[7];
 #define _gth 0
-#define ek ek_Kv7
- double ek = -80;
 #define mftau_Kv7_Kv7 _thread1data[0]
 #define mftau_Kv7 _thread[_gth]._pval[0]
 #define mstau_Kv7_Kv7 _thread1data[1]
@@ -152,12 +152,12 @@ static double _thread1data[7];
  0,0,0
 };
  static HocParmUnits _hoc_parm_units[] = {
- "ek_Kv7", "mV",
  "mstau_Kv7_Kv7", "ms",
  "mftau_Kv7_Kv7", "ms",
  "stau_Kv7_Kv7", "ms",
  "wtau_Kv7_Kv7", "ms",
  "g_Kv7_bar_Kv7", "S/cm2",
+ "ek_Kv7", "mV",
  "g_Kv7_Kv7", "S/cm2",
  "i_Kv7_Kv7", "mA/cm2",
  0,0
@@ -169,7 +169,6 @@ static double _thread1data[7];
  static double w_Kv70 = 0;
  /* connect global user variables to hoc */
  static DoubScal hoc_scdoub[] = {
- "ek_Kv7", &ek_Kv7,
  "minf_Kv7_Kv7", &minf_Kv7_Kv7,
  "sinf_Kv7_Kv7", &sinf_Kv7_Kv7,
  "winf_Kv7_Kv7", &winf_Kv7_Kv7,
@@ -201,6 +200,7 @@ static void _ode_matsol(NrnThread*, _Memb_list*, int);
  "7.7.0",
 "Kv7",
  "g_Kv7_bar_Kv7",
+ "ek_Kv7",
  0,
  "g_Kv7_Kv7",
  "i_Kv7_Kv7",
@@ -217,11 +217,12 @@ extern Prop* need_memb(Symbol*);
 static void nrn_alloc(Prop* _prop) {
 	Prop *prop_ion;
 	double *_p; Datum *_ppvar;
- 	_p = nrn_prop_data_alloc(_mechtype, 13, _prop);
+ 	_p = nrn_prop_data_alloc(_mechtype, 14, _prop);
  	/*initialize range parameters*/
  	g_Kv7_bar = 0.000486307;
+ 	ek = -80;
  	_prop->param = _p;
- 	_prop->param_size = 13;
+ 	_prop->param_size = 14;
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 1, _prop);
  	_prop->dparam = _ppvar;
  	/*connect ionic variables to this model*/
@@ -256,7 +257,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
   hoc_reg_nmodl_text(_mechtype, nmodl_file_text);
   hoc_reg_nmodl_filename(_mechtype, nmodl_filename);
 #endif
-  hoc_register_prop_size(_mechtype, 13, 1);
+  hoc_register_prop_size(_mechtype, 14, 1);
   hoc_register_dparam_semantics(_mechtype, 0, "cvodeieq");
  	hoc_register_cvode(_mechtype, _ode_count, _ode_map, _ode_spec, _ode_matsol);
  	hoc_register_tolerance(_mechtype, _hoc_state_tol, &_atollist);
@@ -583,7 +584,7 @@ static const char* nmodl_file_text =
   "NEURON {\n"
   "        SUFFIX Kv7\n"
   "        NONSPECIFIC_CURRENT i_Kv7\n"
-  "        RANGE g_Kv7_bar, g_Kv7\n"
+  "        RANGE g_Kv7_bar, g_Kv7, ek\n"
   "        GLOBAL minf_Kv7, winf_Kv7, sinf_Kv7, mstau_Kv7, mftau_Kv7, wtau_Kv7, stau_Kv7\n"
   "        \n"
   "	THREADSAFE : assigned GLOBALs will be per thread\n"

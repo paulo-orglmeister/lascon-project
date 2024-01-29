@@ -419,8 +419,7 @@ I_nca=gnca*(v-ena)
 
 
 # Total current
-
-I_tot=0
+I_tot = I_unc2
 #I_tot=Ishal+I_bk+I_bk2+I_shak+I_cca1+I_egl19+I_unc2+I_sk+I_leak+I_egl36+I_nca+I_slo1+I_slo2+I_kir
 
 aux Itot=I_tot
@@ -439,7 +438,7 @@ v'=(Istim-I_tot)/c
 init v=-70
 #current clamp protocol
 Istim=if(t>ton)then(if(t<toff)then(iclamp)else(ih))else(ih)
-par iclamp=4,ton=900,toff=1400
+par iclamp=4,ton=900,toff=950
 
 ### XPP SETTINGS
 @ meth=stiff,trans=0,total=1500,dt=0.01,maxstor=1000000,bound=100000000000000,atol=1e-8,tol=1e-8
