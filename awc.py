@@ -1,4 +1,4 @@
-#C. elegans AWCR neuron
+#C. elegans AWCR neuron 
     
 from neuron import h, gui
 import matplotlib.pyplot as plt
@@ -14,27 +14,26 @@ class AWCCell:
         """Create the sections of the cell."""
         self.soma = h.Section(name='soma')
         self.dend = h.Section(name='dend')
+        self.axon = h.Section(name='axon')
     
     def build_topology(self):
         """Connect the sections of the cell"""
-        self.dend.connect(self.soma(1))
+        self.dend.connect(self.soma(1.0))
+        self.axon.connect(self.soma(0.0))
     
     def define_geometry(self):
         """Set the 3D geometry of the cell."""
-        self.soma.L = self.soma.diam = 6.0 # microns (real value)
-        self.dend.L = 980                    # microns
-        self.dend.diam = 0.3                     # microns
-        self.dend.nseg = 11
+        self.soma.L = self.soma.diam = 6.0 # microns 
+        self.dend.L = 980                  # microns
+        self.dend.diam = 0.3               # microns
+        self.dend.nseg = 11                # microns
+        self.axon.diam = 0.3               # microns
+        self.axon.L    = 66                # microns
     
     def define_biophysics(self):
         """Assign the membrane properties across the cell."""
-        '''
-        for sec in [self.soma, self.dend]: # 
-            sec.Ra = 100    # Axial resistance in Ohm * cm
-            sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
-        '''
-
-        self.soma.cm = 2.741 # (uF/cm2) (Nicoletti et. al)
+          
+        self.soma.cm = 2.74 # (uF/cm2) (Nicoletti et. al)
         #Insert custom currents defined in .mod files
         self.soma.insert('Kv4')
         self.soma.insert('Kvs1')
@@ -43,6 +42,10 @@ class AWCCell:
         self.soma.insert('Kv10')  
         self.soma.insert('Cav1') 
         self.soma.insert('Cav2')
+
+        for sec in [self.dend,self.axon]:
+            sec.Ra = 100    # Axial resistance in Ohm * cm (Palyanov et al.)
+            sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
 
         self.soma.gl_Kv4         = .0002387 #S/cm2 (leak) OK
         self.g_Nalcn_Kv4         = .00004863 #S/cm2 (nca) OK
@@ -56,14 +59,14 @@ class AWCCell:
         
         # Insert passive current in the dendrite
         self.dend.insert('pas')
-        self.dend.g_pas = 0.001  # Passive conductance in S/cm2
+        self.dend.g_pas = 10**(-5)  # Passive conductance in S/cm2 - estimated at 100 kOhm*cm2, from data in Palyanov et al. 
         self.dend.e_pas = -80    # Leak reversal potential mV
                 
     def add_current_stim(self, delay):
-        self.stim = h.IClamp(self.soma(1.0)) #1.0 is the distal end of the dendrite
+        self.stim = h.IClamp(self.dend(1.0)) #1.0 is the distal end of the dendrite
         self.stim.amp = 0.020 # input current in nA
         self.stim.delay = delay  # turn on after this time in ms
-        self.stim.dur = 500  # duration of 1 ms
+        self.stim.dur = 500  # duration in ms
     
     def set_recording(self):
         """Set soma, dendrite, and time recording vectors on the cell. """

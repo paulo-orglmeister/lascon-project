@@ -13,28 +13,23 @@ class RMDCell:
     def create_sections(self):
         """Create the sections of the cell."""
         self.soma = h.Section(name='soma')
-        #self.dend = h.Section(name='dend')
+        self.dend = h.Section(name='dend')
     
     def build_topology(self):
         """Connect the sections of the cell"""
-        #self.dend.connect(self.soma(1))
+        self.dend.connect(self.soma(1.0))
     
     def define_geometry(self):
         """Set the 3D geometry of the cell."""
         self.soma.L = self.soma.diam = 4.84 # microns (estimate)
-        #self.dend.L = 41.92  # microns                   
-        #self.dend.diam = 0.2979 # microns                    
-        #self.dend.nseg = 11
+        self.dend.L = 42  # microns                   
+        self.dend.diam = 0.3 # microns                    
+        self.dend.nseg = 11
     
     def define_biophysics(self):
         """Assign the membrane properties across the cell."""
-        '''
-        for sec in [self.soma, self.dend]: # 
-            sec.Ra = 100    # Axial resistance in Ohm * cm
-            sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
-        '''
 
-        self.soma.cm = 1.630574514 # (uF/cm2) (Nicoletti et. al)
+        self.soma.cm = 1.63 # (uF/cm2) (Nicoletti et. al)
         #Insert custom currents defined in .mod files
         self.soma.insert('Kv3') 
         self.soma.insert('Kv4')  
@@ -45,7 +40,7 @@ class RMDCell:
 
         self.soma.g_Kv3_bar_Kv3   = .00176646 #S/cm2 (egl-36)
         self.soma.gl_Kv4          = .00054352 #S/cm2 (leak) 
-        self.soma.g_Nalcn_Kv4          = .00006794 #S/cm2 (nca)
+        self.soma.g_Nalcn_Kv4     = .00006794 #S/cm2 (nca)
         self.soma.g_Kv4_bar_Kv4   = .00339703 #S/cm2 (shl-1)  
         self.soma.g_Kir_bar_Kir   = .00027176 #S/cm2 (irkl-3) 
         self.soma.g_Cav1_bar_Cav1 = .00134522 #S/cm2 (elg-19) 
@@ -53,9 +48,11 @@ class RMDCell:
         self.soma.g_Cav3_bar_Cav3 = .00421232 #S/cm2 (cca-1)
 
         # Insert passive current in the dendrite
-        #self.dend.insert('pas')
-        #self.dend.g_pas = 0.001  # Passive conductance in S/cm2
-        #self.dend.e_pas = -80    # Leak reversal potential mV
+        self.dend.insert('pas')
+        self.dend.g_pas = 10**(-5) # Passive conductance in S/cm2  - estimated at 100 kOhm*cm2, from data in Palyanov et al.
+        self.dend.e_pas = -80      # Leak reversal potential mV
+        self.dend.Ra = 100         # Axial resistivity in Ohm*cm, from data in Palyanov et al.
+        self.dend.cm = 1           # uF/cm2
                 
     def add_current_stim1(self, delay,curr):
         self.stim1 = h.IClamp(self.soma(0.5)) #1.0 is the distal end of the dendrite
@@ -67,7 +64,7 @@ class RMDCell:
         self.stim2 = h.IClamp(self.soma(0.5)) #1.0 is the distal end of the dendrite
         self.stim2.amp = curr*0.001 # input current in nA
         self.stim2.delay = delay  # turn on after this time in ms
-        self.stim2.dur = 25  # duration of 1 ms
+        self.stim2.dur = 25  # duration in ms
     
     
     def set_recording(self):
