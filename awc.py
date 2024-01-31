@@ -63,7 +63,7 @@ class AWCCell:
         self.dend.e_pas = -80    # Leak reversal potential mV
                 
     def add_current_stim(self, delay):
-        self.stim = h.IClamp(self.dend(1.0)) #1.0 is the distal end of the dendrite
+        self.stim = h.IClamp(self.axon(1.0)) #1.0 is the distal end of the dendrite
         self.stim.amp = 0.020 # input current in nA
         self.stim.delay = delay  # turn on after this time in ms
         self.stim.dur = 500  # duration in ms
@@ -72,9 +72,11 @@ class AWCCell:
         """Set soma, dendrite, and time recording vectors on the cell. """
         self.soma_v_vec = h.Vector()   # Membrane potential vector at soma
         self.dend_v_vec = h.Vector()   # Membrane potential vector at dendrite
+        self.axon_v_vec = h.Vector()   # Membrane potential vector at axon
         self.t_vec = h.Vector()        # Time stamp vector
         self.soma_v_vec.record(self.soma(0.5)._ref_v)
         self.dend_v_vec.record(self.dend(0.5)._ref_v)
+        self.axon_v_vec.record(self.axon(0.5)._ref_v)
         self.t_vec.record(h._ref_t)
 
     def plot_voltage(self, title='Cell voltage', ylim=None, show=True):
@@ -82,6 +84,7 @@ class AWCCell:
         fig = plt.figure(figsize=(8,4)) # Default figsize is (8,6)
         plt.plot(self.t_vec, self.soma_v_vec, color='black', label='soma(0.5)')
         plt.plot(self.t_vec, self.dend_v_vec, color='red', label='dend(0.5)')
+        plt.plot(self.t_vec, self.axon_v_vec, color='blue', label='axon(0.5)')
         plt.legend()
         plt.xlabel('time (ms)')
         plt.ylabel('mV')
